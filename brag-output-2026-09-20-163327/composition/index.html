@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
+      :root {
+        --dark: #07080d;
+        --paper: #f3f5f7;
+        --ink: #10131a;
+        --indigo: #3b3663;
+        --mint: #57c7a6;
+        --muted-dark: rgba(242, 243, 248, 0.58);
+        --muted-light: rgba(16, 19, 26, 0.58);
+        --sans: ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+        --mono: ui-monospace, "Cascadia Mono", Consolas, "SF Mono", monospace;
+      }
+
+      html, body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--dark);
+      }
+
+      #root { width: 100%; height: 100%; position: relative; font-family: var(--sans); }
+
+      .clip {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .ground-dark { background: radial-gradient(90% 70% at 50% 18%, #17162b 0%, #0a0b12 55%, #05060a 100%); }
+      .ground-light { background: var(--paper); }
+
+      /* ---- scene 1: the claim ---- */
+      .hashes { display: flex; gap: 72px; align-items: center; }
+      .hash {
+        font-family: var(--mono);
+        font-size: 108px;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        color: #f2f3f8;
+      }
+      .hash-eq { font-size: 56px; color: var(--mint); opacity: 0; }
+      .claim-line {
+        margin-top: 44px;
+        font-size: 46px;
+        font-weight: 500;
+        color: #f2f3f8;
+        letter-spacing: -0.01em;
+      }
+      .counter {
+        margin-top: 64px;
+        display: flex;
+        align-items: baseline;
+        gap: 24px;
+        font-family: var(--mono);
+        font-size: 28px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--muted-dark);
+      }
+      .counter b { font-size: 76px; letter-spacing: 0; color: var(--mint); font-weight: 600; }
+
+      /* ---- shared: a captured screen, shown as a screen ---- */
+      .shot {
+        height: 84%;
+        max-width: 88%;
+        object-fit: contain;
+        border-radius: 22px;
+        box-shadow: 0 40px 120px rgba(0, 0, 0, 0.55);
+      }
+      .shot-light { box-shadow: 0 34px 90px rgba(16, 19, 26, 0.18); }
+
+      .eyebrow {
+        position: absolute;
+        top: 62px;
+        left: 92px;
+        font-family: var(--mono);
+        font-size: 24px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+      }
+      .eyebrow-dark { color: var(--muted-dark); }
+      .eyebrow-light { color: var(--muted-light); }
+
+      .strip {
+        position: absolute;
+        bottom: 58px;
+        left: 92px;
+        right: 92px;
+        display: flex;
+        align-items: baseline;
+        gap: 22px;
+        font-size: 34px;
+        color: #f2f3f8;
+      }
+      .strip .rule-id {
+        font-family: var(--mono);
+        font-size: 24px;
+        letter-spacing: 0.06em;
+        color: var(--mint);
+        white-space: nowrap;
+      }
+      .strip-light { color: var(--ink); }
+      .strip-light .rule-id { color: var(--indigo); }
+
+      /* ---- scene 3 + 6: statements ---- */
+      .statement {
+        font-size: 92px;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        text-align: center;
+        line-height: 1.08;
+      }
+      .statement-light { color: var(--ink); }
+      .sub {
+        margin-top: 40px;
+        font-family: var(--mono);
+        font-size: 28px;
+        letter-spacing: 0.1em;
+        color: var(--muted-light);
+        text-align: center;
+      }
+      .final-1 { font-size: 104px; font-weight: 600; letter-spacing: -0.03em; color: var(--muted-dark); }
+      .final-2 { font-size: 132px; font-weight: 600; letter-spacing: -0.035em; color: #f2f3f8; margin-top: 8px; }
+      .final-sub {
+        margin-top: 54px;
+        font-family: var(--mono);
+        font-size: 26px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--mint);
+      }
+
+      /* ---- scene 6a: the number ---- */
+      .numbers { display: flex; gap: 140px; align-items: flex-end; }
+      .num { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+      .num-value { font-size: 128px; font-weight: 600; letter-spacing: -0.03em; color: var(--ink); }
+      .num-value.dim { color: var(--muted-light); font-size: 92px; }
+      .num-label {
+        font-family: var(--mono);
+        font-size: 24px;
+        letter-spacing: 0.08em;
+        color: var(--muted-light);
+        text-align: center;
+        max-width: 420px;
+        line-height: 1.4;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="80"
+      data-width="1920"
+      data-height="1080"
+    >
+      <!-- ============ 1. THE CLAIM — 0-9s ============ -->
+      <section id="s1" class="clip ground-dark" data-start="0" data-duration="9" data-track-index="0">
+        <div class="hashes">
+          <span class="hash" id="s1-hash-a">0ebe90a225</span>
+          <span class="hash-eq" id="s1-eq">=</span>
+          <span class="hash" id="s1-hash-b">0ebe90a225</span>
+        </div>
+        <div class="claim-line" id="s1-line">Identical id. Identical text.</div>
+        <div class="counter" id="s1-counter">
+          <span>External calls</span>
+          <b id="s1-zero">0</b>
+        </div>
+      </section>
+
+      <!-- ============ 2. NINE STAGES — 9-25s ============ -->
+      <section id="s2" class="clip ground-light" data-start="9" data-duration="16" data-track-index="0">
+        <span class="eyebrow eyebrow-light" id="s2-eyebrow">Live · the router, running</span>
+        <img class="shot shot-light" id="s2-shot" src="assets/02-demo-stages.png" alt="Nine deterministic stages with their real output" />
+        <div class="strip strip-light" id="s2-strip">
+          <span class="rule-id">05 apply rules</span>
+          <span>R-MAYA-REDNESS, R-MAYA-DRY, R-MAYA-GUARD-RETINOL — fired, and shown.</span>
+        </div>
+      </section>
+
+      <!-- ============ 3. THE FRAMING LINE — 25-31s ============ -->
+      <section id="s3" class="clip ground-light" data-start="25" data-duration="6" data-track-index="0">
+        <div class="statement statement-light" id="s3-line">No model runs when you ask.</div>
+        <div class="sub" id="s3-sub">normalise · classify · constraints · filter · rules · rank · render</div>
+      </section>
+
+      <!-- ============ 4. SHE ANSWERS — 31-49s ============ -->
+      <section id="s4" class="clip ground-dark" data-start="31" data-duration="18" data-track-index="0">
+        <span class="eyebrow eyebrow-dark" id="s4-eyebrow">Asked · what is the best event you have been to?</span>
+        <img class="shot" id="s4-shot" src="assets/06-persona-answers.png" alt="Aditi's persona answering from her own notes" />
+        <div class="strip" id="s4-strip">
+          <span class="rule-id">R-ADITI-BEST</span>
+          <span>Her own notes call it the best answer she ever gave.</span>
+        </div>
+      </section>
+
+      <!-- ============ 5. SHE DECLINES — 49-68s ============ -->
+      <section id="s5" class="clip ground-dark" data-start="49" data-duration="19" data-track-index="0">
+        <span class="eyebrow eyebrow-dark" id="s5-eyebrow">Asked · would you take the seed-stage offer?</span>
+        <img class="shot" id="s5-shot" src="assets/07-persona-declines.png" alt="Aditi's persona declining a question she has never ruled on" />
+        <div class="strip" id="s5-strip">
+          <span class="rule-id">R-ADITI-GUARD-ROOM</span>
+          <span>One true thing about a room she was in, over ten clever things about one she was not.</span>
+        </div>
+      </section>
+
+      <!-- ============ 6a. WHAT THE CREATOR SEES — 68-75s ============ -->
+      <section id="s6" class="clip ground-light" data-start="68" data-duration="7" data-track-index="0">
+        <span class="eyebrow eyebrow-light" id="s6-eyebrow">And what she sees · what to make next</span>
+        <div class="numbers">
+          <div class="num">
+            <span class="num-value" id="s6-a">251.9</span>
+            <span class="num-label">the backstage answer<br />sign-ups per 100K views</span>
+          </div>
+          <div class="num">
+            <span class="num-value dim" id="s6-b">1.6</span>
+            <span class="num-label">Cannes Lions week<br />twelve times the audience</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 6b. THE LINE — 75-80s ============ -->
+      <section id="s7" class="clip ground-dark" data-start="75" data-duration="5" data-track-index="0">
+        <div class="final-1" id="s7-a">Not a chatbot.</div>
+        <div class="final-2" id="s7-b">A judgement store.</div>
+        <div class="final-sub" id="s7-c">Her rules. Her words. Her call.</div>
+      </section>
+
+      <!-- ============ AUDIO ============ -->
+      <audio id="aud-1" class="clip" src="assets/music.mp3" data-start="0" data-duration="80" data-volume="0.17"></audio>
+      <audio id="aud-2" class="clip" src="assets/confirm.ogg" data-start="2.4" data-duration="2" data-volume="0.5"></audio>
+      <audio id="aud-3" class="clip" src="assets/soft.ogg" data-start="4.2" data-duration="2" data-volume="0.35"></audio>
+      <audio id="aud-4" class="clip" src="assets/tick.ogg" data-start="9.6" data-duration="1" data-volume="0.3"></audio>
+      <audio id="aud-5" class="clip" src="assets/tick.ogg" data-start="10.3" data-duration="1" data-volume="0.3"></audio>
+      <audio id="aud-6" class="clip" src="assets/tick.ogg" data-start="11.0" data-duration="1" data-volume="0.3"></audio>
+      <audio id="aud-7" class="clip" src="assets/soft.ogg" data-start="31.4" data-duration="2" data-volume="0.34"></audio>
+      <audio id="aud-8" class="clip" src="assets/soft.ogg" data-start="68.3" data-duration="2" data-volume="0.34"></audio>
+      <audio id="aud-9" class="clip" src="assets/confirm.ogg" data-start="75.3" data-duration="2" data-volume="0.42"></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const ease = 'power3.out';
+
+      /* Scene 1 — the claim assembles, one piece at a time. */
+      tl.fromTo('#s1-hash-a', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.7, ease }, 0.4);
+      tl.fromTo('#s1-hash-b', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.7, ease }, 1.7);
+      tl.fromTo('#s1-eq', { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.5, ease }, 2.5);
+      tl.fromTo('#s1-line', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.7, ease }, 2.9);
+      tl.fromTo('#s1-counter', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.7, ease }, 4.3);
+      tl.fromTo('#s1-zero', { scale: 1.5 }, { scale: 1, duration: 0.6, ease }, 4.5);
+
+      /* Scene 2 — the captured router screen, settling rather than sliding. */
+      tl.fromTo('#s2-eyebrow', { opacity: 0 }, { opacity: 1, duration: 0.6 }, 9.3);
+      tl.fromTo('#s2-shot', { opacity: 0, scale: 1.035 }, { opacity: 1, scale: 1, duration: 1.2, ease }, 9.2);
+      tl.to('#s2-shot', { scale: 1.02, duration: 13, ease: 'none' }, 11.4);
+      tl.fromTo('#s2-strip', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7, ease }, 12.6);
+
+      /* Scene 3 — one statement, held. */
+      tl.fromTo('#s3-line', { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.8, ease }, 25.3);
+      tl.fromTo('#s3-sub', { opacity: 0 }, { opacity: 1, duration: 0.8 }, 26.2);
+
+      /* Scene 4 — she answers. */
+      tl.fromTo('#s4-eyebrow', { opacity: 0 }, { opacity: 1, duration: 0.6 }, 31.4);
+      tl.fromTo('#s4-shot', { opacity: 0, scale: 1.03 }, { opacity: 1, scale: 1, duration: 1.2, ease }, 31.2);
+      tl.to('#s4-shot', { scale: 1.015, duration: 15, ease: 'none' }, 33.4);
+      tl.fromTo('#s4-strip', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8, ease }, 39.5);
+
+      /* Scene 5 — she declines. No accent, no flourish. */
+      tl.fromTo('#s5-eyebrow', { opacity: 0 }, { opacity: 1, duration: 0.6 }, 49.4);
+      tl.fromTo('#s5-shot', { opacity: 0 }, { opacity: 1, duration: 1.2 }, 49.2);
+      tl.fromTo('#s5-strip', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8, ease }, 58.0);
+
+      /* Scene 6 — the two numbers, side by side. */
+      tl.fromTo('#s6-eyebrow', { opacity: 0 }, { opacity: 1, duration: 0.5 }, 68.3);
+      tl.fromTo('#s6-a', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, ease }, 68.5);
+      tl.fromTo('#s6-b', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, ease }, 70.2);
+
+      /* Scene 7 — the line. */
+      tl.fromTo('#s7-a', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.7, ease }, 75.3);
+      tl.fromTo('#s7-b', { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.8, ease }, 75.9);
+      tl.fromTo('#s7-c', { opacity: 0 }, { opacity: 1, duration: 0.8 }, 77.2);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines['main'] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

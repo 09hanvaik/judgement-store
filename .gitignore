@@ -13,3 +13,5 @@ data/test.db-*
 public/persona/*.mp3
 public/persona/*.json
 .next-build
+brag-output-*/composition/node_modules
+brag-output-*/brag.mp4

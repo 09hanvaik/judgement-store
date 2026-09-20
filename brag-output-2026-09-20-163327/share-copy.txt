@@ -1,0 +1,5 @@
+Built a creator AI that answers from her real notes — and says "I have not made that call" when she hasn't.
+
+Same question in, identical hash out, zero external calls. No model runs when you ask: nine deterministic stages over her own judgement, and every answer shows the rule that fired.
+
+Not a chatbot. A judgement store.
