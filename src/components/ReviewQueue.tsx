@@ -87,10 +87,11 @@ export function ReviewQueue({ slug, creatorName }: { slug: string; creatorName: 
   return (
     <div className="space-y-10">
       <section>
-        <h2 className="text-lg font-semibold">Paste a voice note</h2>
+        <h2 className="text-lg font-semibold">Source</h2>
         <p className="mb-3 text-sm text-muted">
-          Transcript text, a notebook page, anything {creatorName.split(' ')[0]} actually said. Audio
-          upload posts to the same pipeline when a transcription key is configured.
+          Takes text: the transcription of a video, a voice note, a notebook page, or the body of a
+          post — anything {creatorName.split(' ')[0]} actually said. Capture from those formats is
+          out of scope for this build; paste the text and the pipeline behind it is real.
         </p>
         <textarea
           value={transcript}
