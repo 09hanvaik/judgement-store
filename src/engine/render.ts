@@ -74,9 +74,15 @@ export function selectTemplate(
   return forMode.find((t) => templateSatisfied(t, slots)) ?? null;
 }
 
-/** Drop sentences that still reference an unfilled slot. */
+/**
+ * Drop sentences that still reference an unfilled slot.
+ *
+ * Two adjacent slots ("{{pick1_note}} {{pick1_caveat}}") are separate units
+ * even without punctuation between them, because each already carries its own
+ * full stop. Otherwise a missing caveat would silently take her note with it.
+ */
 export function fillTemplate(text: string, slots: Slots): string {
-  const sentences = text.split(/(?<=[.!?])\s+/);
+  const sentences = text.split(/(?<=[.!?])\s+|(?<=\}\})\s+(?=\{\{)/);
   const kept: string[] = [];
   for (const sentence of sentences) {
     let missing = false;

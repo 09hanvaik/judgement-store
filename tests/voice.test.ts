@@ -104,6 +104,14 @@ describe('sentence length', () => {
 });
 
 describe('templates', () => {
+  it('keeps her note when an adjacent caveat slot is empty', () => {
+    const text = fillTemplate('{{pick1_name}}. {{pick1_note}} {{pick1_caveat}}', {
+      pick1_name: 'Cannes Lions week',
+      pick1_note: 'Everyone only saw the glamour.',
+    });
+    expect(text).toBe('Cannes Lions week. Everyone only saw the glamour.');
+  });
+
   it('drops a sentence whose slot is missing rather than printing undefined', () => {
     const text = fillTemplate('{{pick1_name}}, {{pick1_price}}. {{pick2_name}} is the other one.', {
       pick1_name: 'Cloud Cream',
