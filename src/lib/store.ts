@@ -186,8 +186,12 @@ export async function loadAnswer(id: string): Promise<AnswerDetail | null> {
         };
       }),
     firedRules: ruleIds.map((ruleId) => {
+      // A rule id can belong to the rules table or to the judgement unit that
+      // carried it. Both are real rules; only their storage differs.
       const rule = ruleRows.find((r) => r.id === ruleId);
-      return { id: ruleId, text: rule?.ruleText ?? coreRuleText(ruleId) };
+      if (rule) return { id: ruleId, text: rule.ruleText };
+      const unit = unitRows.find((u) => u.ruleId === ruleId);
+      return { id: ruleId, text: unit?.ruleText ?? coreRuleText(ruleId) };
     }),
   };
 }

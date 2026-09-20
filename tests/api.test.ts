@@ -76,6 +76,11 @@ describe('GET /api/answers/[id]', () => {
     expect(body.answer.picks[0].itemName).toBeTruthy();
     expect(body.answer.firedRules[0].text.length).toBeGreaterThan(10);
     expect(body.answer.creator.disclosureText).toBeTruthy();
+    // The share page is a Forwarder's landing page: every rule must resolve,
+    // whether it lives in the rules table or on the judgement unit.
+    for (const rule of body.answer.firedRules) {
+      expect(rule.text).not.toBe('Rule text unavailable.');
+    }
   });
 
   it('404s for an unknown id', async () => {
