@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { alignmentToVisemes, estimateVisemes, frameAt } from '@/persona/visemes';
 import { looksLikeGlb } from '@/persona/model-url';
+import { BLINK_SHAPES, VISEME_TO_ARKIT, canonicalShapeName } from '@/persona/arkit';
 
 /** Alignment as ElevenLabs returns it: one entry per character. */
 function alignmentFor(text: string, secondsPerChar = 0.06) {
@@ -98,5 +99,57 @@ describe('model url validation', () => {
     expect(looksLikeGlb('https://example.com/a.png')).toBe(false);
     expect(looksLikeGlb('javascript:alert(1)')).toBe(false);
     expect(looksLikeGlb('not a url')).toBe(false);
+  });
+});
+
+describe('blendshape naming across rigs', () => {
+  it('reduces every common spelling to one name', () => {
+    for (const raw of ['eyeBlink_L', 'eyeBlinkLeft', 'eyeBlinkL', 'eye_blink_left']) {
+      expect(canonicalShapeName(raw)).toBe('eyeBlinkLeft');
+    }
+    for (const raw of ['mouthPress_R', 'mouthPressRight', 'mouthPressR']) {
+      expect(canonicalShapeName(raw)).toBe('mouthPressRight');
+    }
+  });
+
+  it('leaves single-sided shapes alone', () => {
+    expect(canonicalShapeName('jawOpen')).toBe('jawOpen');
+    expect(canonicalShapeName('mouthFunnel')).toBe('mouthFunnel');
+    expect(canonicalShapeName('tongueOut')).toBe('tongueOut');
+  });
+
+  it('never rewrites a viseme name', () => {
+    expect(canonicalShapeName('viseme_PP')).toBe('viseme_PP');
+    expect(canonicalShapeName('viseme_aa')).toBe('viseme_aa');
+  });
+
+  it('maps every viseme to shapes the sample rig actually has', () => {
+    // The 52 ARKit names carried by three.js's facecap.glb, canonicalised.
+    const rig = new Set(
+      [
+        'jawOpen', 'jawForward', 'jawLeft', 'jawRight', 'mouthFunnel', 'mouthPucker',
+        'mouthLeft', 'mouthRight', 'mouthRollUpper', 'mouthRollLower', 'mouthShrugUpper',
+        'mouthShrugLower', 'mouthClose', 'mouthSmileLeft', 'mouthSmileRight',
+        'mouthFrownLeft', 'mouthFrownRight', 'mouthDimpleLeft', 'mouthDimpleRight',
+        'mouthUpperUpLeft', 'mouthUpperUpRight', 'mouthLowerDownLeft', 'mouthLowerDownRight',
+        'mouthPressLeft', 'mouthPressRight', 'mouthStretchLeft', 'mouthStretchRight',
+        'tongueOut', 'eyeBlinkLeft', 'eyeBlinkRight',
+      ],
+    );
+    for (const [viseme, mix] of Object.entries(VISEME_TO_ARKIT)) {
+      for (const shape of Object.keys(mix)) {
+        expect(rig.has(shape), `${viseme} -> ${shape}`).toBe(true);
+      }
+    }
+    for (const shape of BLINK_SHAPES) expect(rig.has(shape)).toBe(true);
+  });
+
+  it('keeps every mix weight inside 0..1', () => {
+    for (const mix of Object.values(VISEME_TO_ARKIT)) {
+      for (const value of Object.values(mix)) {
+        expect(value).toBeGreaterThan(0);
+        expect(value).toBeLessThanOrEqual(1);
+      }
+    }
   });
 });

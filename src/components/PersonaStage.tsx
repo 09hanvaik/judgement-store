@@ -298,18 +298,20 @@ export function PersonaStage({ creator, suggestions, personaUrl, live }: Props) 
       <canvas ref={canvasRef} className="stage-bg" aria-hidden />
 
       <div className="stage-inner">
+        {personaUrl && avatarOk !== false ? (
+          <div className="persona-hero" data-speaking={speaking}>
+            <PersonaAvatar
+              ref={avatarRef}
+              modelUrl={personaUrl}
+              accent={creator.accent}
+              onReady={setAvatarOk}
+              className="persona-canvas"
+            />
+          </div>
+        ) : null}
+
         <header className="glass head">
-          {personaUrl && avatarOk !== false ? (
-            <span className="persona" data-speaking={speaking}>
-              <PersonaAvatar
-                ref={avatarRef}
-                modelUrl={personaUrl}
-                accent={creator.accent}
-                onReady={setAvatarOk}
-                className="persona-canvas"
-              />
-            </span>
-          ) : (
+          {personaUrl && avatarOk !== false ? null : (
             <span className="orb" data-speaking={speaking} aria-hidden>
               <span className="orb-ring" />
               <span className="orb-core">{first[0]}</span>

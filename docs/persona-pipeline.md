@@ -99,3 +99,33 @@ browser's own voice, and an estimated mouth.
   error falls back to browser speech rather than surfacing to the visitor.
 - A consented `voice_id` is a real gate, not a formality. Without one, speech
   synthesis is skipped entirely regardless of which keys are present.
+
+## Driving a rig that has no visemes
+
+Most rigged heads ship ARKit's 52 blendshapes and no Oculus visemes. The
+renderer handles both: it indexes every morph target under one canonical
+spelling (`eyeBlink_L`, `eyeBlinkLeft` and `eyeBlinkL` all reduce to the same
+name), then drives whichever set the model actually has.
+
+On a viseme rig a viseme is one slider. On an ARKit rig it is a small chord —
+"oo" is a pucker plus a funnel plus a little jaw, not one magic control. The
+mapping lives in `src/persona/arkit.ts`, and a test asserts every shape it
+names exists on a real rig.
+
+That is what makes a free model work.
+
+## A free model that works
+
+No vendor, no key:
+
+```
+https://cdn.jsdelivr.net/gh/mrdoob/three.js@r170/examples/models/gltf/facecap.glb
+```
+
+three.js's own face-capture sample: 52 ARKit blendshapes, CORS open, 332KB.
+The onboarding screen has a **Use a free sample head** button that fills it in.
+It is a stand-in likeness, not the creator — label it as such if you show it.
+
+It also uses KTX2-compressed textures, so the loader is wired with a KTX2
+transcoder. The transcoder is vendored into `public/basis` rather than pulled
+from a CDN, so the persona still renders with no network.

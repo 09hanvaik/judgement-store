@@ -262,21 +262,26 @@
   .orb[data-speaking='true'] .orb-ring { animation: none; opacity: 0.9; }
 }
 
-/* The rendered 3D persona replaces the orb once the creator has generated one. */
-.persona {
+/* The rendered 3D persona gets the stage when the creator has generated one. */
+.persona-hero {
   position: relative;
-  display: block;
-  height: 64px;
-  width: 64px;
-  flex: 0 0 auto;
+  height: 260px;
+  width: 100%;
+  border-radius: 22px;
   overflow: hidden;
-  border-radius: 50%;
-  border: 1px solid rgb(255 255 255 / 0.22);
-  background: rgb(255 255 255 / 0.06);
+  border: 1px solid rgb(255 255 255 / 0.14);
+  background: radial-gradient(80% 70% at 50% 25%, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.03));
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: box-shadow 220ms ease;
+}
+
+.persona-hero[data-speaking='true'] {
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.3), 0 14px 50px rgb(0 0 0 / 0.35);
 }
 
 .persona-canvas { height: 100%; width: 100%; }
 
-.persona[data-speaking='true'] {
-  box-shadow: 0 0 0 3px rgb(255 255 255 / 0.16);
+@media (max-width: 480px) {
+  .persona-hero { height: 220px; }
 }

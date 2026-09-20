@@ -3,7 +3,10 @@
 import { useEffect, useImperativeHandle, useRef, forwardRef } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { frameAt, type VisemeTrack } from './visemes';
+import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
+import { frameAt, type Viseme, type VisemeTrack } from './visemes';
+import { BLINK_SHAPES, VISEME_TO_ARKIT, canonicalShapeName } from './arkit';
 
 /**
  * In-browser 3D persona. Renders a rigged GLB (Ready Player Me heads carry
@@ -27,8 +30,8 @@ interface Props {
   className?: string;
 }
 
-/** Blendshapes we drive ourselves; everything else on the mesh is left alone. */
-const IDLE_SHAPES = ['eyeBlinkLeft', 'eyeBlinkRight'];
+/** One entry per canonical blendshape, pointing at every mesh that carries it. */
+type ShapeIndex = Map<string, Array<{ mesh: THREE.Mesh; index: number }>>;
 
 export const PersonaAvatar = forwardRef<PersonaHandle, Props>(function PersonaAvatar(
   { modelUrl, accent, onReady, className },
@@ -53,7 +56,8 @@ export const PersonaAvatar = forwardRef<PersonaHandle, Props>(function PersonaAv
     let renderer: THREE.WebGLRenderer;
     try {
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    } catch {
+    } catch (error) {
+      console.warn('persona: no WebGL context for the avatar', error);
       onReady?.(false);
       return;
     }
@@ -76,54 +80,99 @@ export const PersonaAvatar = forwardRef<PersonaHandle, Props>(function PersonaAv
     const root = new THREE.Group();
     scene.add(root);
 
-    let meshes: THREE.Mesh[] = [];
-    let head: THREE.Object3D | null = null;
+    const shapes: ShapeIndex = new Map();
+    /** True when the rig ships Oculus visemes; false means drive ARKit instead. */
+    let hasVisemes = false;
+    let mouthShapes: string[] = [];
     let disposed = false;
 
     const setShape = (name: string, value: number) => {
-      for (const mesh of meshes) {
-        const index = mesh.morphTargetDictionary?.[name];
-        if (index === undefined || !mesh.morphTargetInfluences) continue;
-        mesh.morphTargetInfluences[index] = value;
+      const targets = shapes.get(name);
+      if (!targets) return;
+      for (const { mesh, index } of targets) {
+        if (mesh.morphTargetInfluences) mesh.morphTargetInfluences[index] = value;
       }
     };
 
-    const clearVisemes = () => {
-      for (const mesh of meshes) {
-        if (!mesh.morphTargetDictionary || !mesh.morphTargetInfluences) continue;
-        for (const [name, index] of Object.entries(mesh.morphTargetDictionary)) {
-          if (name.startsWith('viseme_')) mesh.morphTargetInfluences[index] = 0;
-        }
+    /** A viseme is one slider on a viseme rig, and a small chord on an ARKit one. */
+    const applyViseme = (viseme: Viseme, weight: number) => {
+      if (hasVisemes) {
+        setShape(viseme, weight);
+        return;
+      }
+      for (const [shape, factor] of Object.entries(VISEME_TO_ARKIT[viseme] ?? {})) {
+        setShape(shape, weight * (factor ?? 0));
       }
     };
 
+    const clearMouth = () => {
+      for (const name of mouthShapes) setShape(name, 0);
+    };
+
+    // Many rigged heads ship KTX2-compressed textures. The transcoder is
+    // vendored into public/basis so this needs no CDN at runtime.
     const loader = new GLTFLoader();
+    const ktx2 = new KTX2Loader().setTranscoderPath('/basis/').detectSupport(renderer);
+    loader.setKTX2Loader(ktx2);
+    loader.setMeshoptDecoder(MeshoptDecoder);
     loader.load(
       modelUrl,
       (gltf) => {
         if (disposed) return;
         const model = gltf.scene;
-        meshes = [];
+
+        // Index every blendshape under one canonical spelling, so a mapping
+        // written once survives a rig that names things its own way.
         model.traverse((child) => {
           const mesh = child as THREE.Mesh;
-          if (mesh.isMesh && mesh.morphTargetDictionary) meshes.push(mesh);
-          if (/head/i.test(child.name) && !head) head = child;
+          if (!mesh.isMesh || !mesh.morphTargetDictionary) return;
+          for (const [raw, index] of Object.entries(mesh.morphTargetDictionary)) {
+            const name = canonicalShapeName(raw);
+            const bucket = shapes.get(name) ?? [];
+            bucket.push({ mesh, index });
+            shapes.set(name, bucket);
+          }
         });
 
-        // Frame the head: measure, then lift the camera to eye level.
+        hasVisemes = [...shapes.keys()].some((name) => name.startsWith('viseme_'));
+        mouthShapes = hasVisemes
+          ? [...shapes.keys()].filter((name) => name.startsWith('viseme_'))
+          : [...new Set(Object.values(VISEME_TO_ARKIT).flatMap((mix) => Object.keys(mix)))];
+
+        if (shapes.size === 0) {
+          // A model with no blendshapes can still be shown, but it cannot speak.
+          console.warn('persona: model has no morph targets — the mouth will not move');
+        }
+
+        // Normalise scale so framing does not depend on the model's units: a
+        // head scan and a full-body avatar both end up one unit tall.
+        const raw = new THREE.Box3().setFromObject(model);
+        const rawSize = raw.getSize(new THREE.Vector3());
+        const scale = rawSize.y > 0 ? 1 / rawSize.y : 1;
+        model.scale.setScalar(scale);
+
         const box = new THREE.Box3().setFromObject(model);
         const size = box.getSize(new THREE.Vector3());
         const center = box.getCenter(new THREE.Vector3());
-        const eyeY = box.max.y - size.y * 0.12;
-        model.position.sub(new THREE.Vector3(center.x, 0, center.z));
+        model.position.sub(new THREE.Vector3(center.x, box.min.y, center.z));
         root.add(model);
-        camera.position.set(0, eyeY, size.y * 0.62 + 1.55);
-        camera.lookAt(0, eyeY, 0);
+
+        // Fit the model to the vertical field of view, then crop in slightly so
+        // it reads as a portrait rather than a figure floating in a box.
+        const fovRad = (camera.fov * Math.PI) / 180;
+        const fitDistance = size.y / (2 * Math.tan(fovRad / 2));
+        const targetY = size.y * 0.55;
+        camera.position.set(0, targetY, fitDistance * 0.92);
+        camera.lookAt(0, targetY, 0);
+        camera.updateProjectionMatrix();
 
         onReady?.(true);
       },
       undefined,
-      () => onReady?.(false),
+      (error) => {
+        console.warn(`persona: could not load ${modelUrl}`, error);
+        onReady?.(false);
+      },
     );
 
     const resize = () => {
@@ -151,7 +200,7 @@ export const PersonaAvatar = forwardRef<PersonaHandle, Props>(function PersonaAv
     stopRef.current = () => {
       track = null;
       audioEl = null;
-      clearVisemes();
+      clearMouth();
     };
 
     // --- autonomous secondary dynamics -------------------------------------
@@ -178,10 +227,10 @@ export const PersonaAvatar = forwardRef<PersonaHandle, Props>(function PersonaAv
         if (blinkPhase >= 0) {
           blinkPhase += dt;
           const v = blinkPhase < 0.07 ? blinkPhase / 0.07 : Math.max(0, 1 - (blinkPhase - 0.07) / 0.13);
-          for (const shape of IDLE_SHAPES) setShape(shape, v);
+          for (const shape of BLINK_SHAPES) setShape(shape, v);
           if (blinkPhase > 0.2) {
             blinkPhase = -1;
-            for (const shape of IDLE_SHAPES) setShape(shape, 0);
+            for (const shape of BLINK_SHAPES) setShape(shape, 0);
           }
         }
 
@@ -212,12 +261,12 @@ export const PersonaAvatar = forwardRef<PersonaHandle, Props>(function PersonaAv
             if (name === current.v) continue;
             const decayed = value * 0.72;
             smoothed.set(name, decayed);
-            setShape(name, decayed < 0.01 ? 0 : decayed);
+            applyViseme(name as Viseme, decayed < 0.01 ? 0 : decayed);
           }
           const previous = smoothed.get(current.v) ?? 0;
           const blended = previous + (target - previous) * 0.45;
           smoothed.set(current.v, blended);
-          setShape(current.v, blended);
+          applyViseme(current.v, blended);
         }
       }
 
@@ -229,6 +278,7 @@ export const PersonaAvatar = forwardRef<PersonaHandle, Props>(function PersonaAv
       disposed = true;
       cancelAnimationFrame(raf);
       observer.disconnect();
+      ktx2.dispose();
       renderer.dispose();
       if (renderer.domElement.parentNode === mount) mount.removeChild(renderer.domElement);
       scene.traverse((child) => {

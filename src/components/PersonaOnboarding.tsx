@@ -18,6 +18,13 @@ interface Props {
   canGenerateFromPhoto: boolean;
 }
 
+/**
+ * A free, correctly-rigged head for when no vendor is configured: three.js's
+ * own face-capture sample, 52 ARKit blendshapes, served from jsDelivr.
+ */
+const SAMPLE_MODEL =
+  'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r170/examples/models/gltf/facecap.glb';
+
 export function PersonaOnboarding({ slug, name, accent, personaUrl, canGenerateFromPhoto }: Props) {
   const router = useRouter();
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -237,14 +244,28 @@ export function PersonaOnboarding({ slug, name, accent, personaUrl, canGenerateF
           placeholder="https://…/persona.glb"
           className="w-full rounded-full border border-line bg-white px-4 py-2.5 text-sm outline-none focus:border-ink"
         />
-        <button
-          type="button"
-          className="btn btn-quiet"
-          onClick={setUrl}
-          disabled={busy || !manualUrl.trim() || !consent}
-        >
-          Use this model
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            className="btn btn-quiet"
+            onClick={setUrl}
+            disabled={busy || !manualUrl.trim() || !consent}
+          >
+            Use this model
+          </button>
+          <button
+            type="button"
+            className="btn btn-quiet"
+            onClick={() => setManualUrl(SAMPLE_MODEL)}
+            disabled={busy}
+          >
+            Use a free sample head
+          </button>
+        </div>
+        <p className="text-xs text-muted">
+          The sample is three.js&apos;s face-capture model: 52 ARKit blendshapes, no vendor, no key.
+          It is a stand-in likeness, not {name.split(' ')[0]} — label it as such if you show it.
+        </p>
       </section>
 
       {message ? <p className="text-sm">{message}</p> : null}
