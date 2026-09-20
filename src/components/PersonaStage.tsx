@@ -1,9 +1,17 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { getVisitorId, logEvent, markVisit } from '@/lib/visitor';
 import type { CardAnswer, CardCreator } from '@/lib/card';
+import type { PersonaHandle } from '@/persona/PersonaAvatar';
+import type { VisemeTrack } from '@/persona/visemes';
+
+// three.js only ships to browsers that actually have a persona to render.
+const PersonaAvatar = dynamic(() => import('@/persona/PersonaAvatar').then((m) => m.PersonaAvatar), {
+  ssr: false,
+});
 
 /**
  * The audience surface. Same deterministic answer as every other surface —
@@ -18,6 +26,10 @@ import type { CardAnswer, CardCreator } from '@/lib/card';
 interface Props {
   creator: CardCreator;
   suggestions: string[];
+  /** A rigged GLB. Absent until the creator generates one; the orb stands in. */
+  personaUrl: string | null;
+  /** Opt-in live synthesis for lines that were never pre-generated. */
+  live: boolean;
 }
 
 interface AskState {
@@ -58,9 +70,12 @@ function hexToVec(hex: string): [number, number, number] {
   ];
 }
 
-export function PersonaStage({ creator, suggestions }: Props) {
+export function PersonaStage({ creator, suggestions, personaUrl, live }: Props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const levelRef = useRef(0);
+  const avatarRef = useRef<PersonaHandle | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [avatarOk, setAvatarOk] = useState<boolean | null>(personaUrl ? null : false);
   const [text, setText] = useState('');
   const [state, setState] = useState<AskState | null>(null);
   const [pending, setPending] = useState(false);
@@ -140,7 +155,52 @@ export function PersonaStage({ creator, suggestions }: Props) {
   }, [creator.accent]);
 
   // --- speech ---------------------------------------------------------------
-  const speak = useCallback((line: string) => {
+
+  /**
+   * Cache first. A pre-generated track plays its own audio and drives the mouth
+   * from real timings; anything else falls back to the browser's voice with an
+   * estimated mouth. Either way the words are already decided — this only
+   * chooses how they are delivered.
+   */
+  const deliver = useCallback(
+    async (line: string, answerId?: string | null) => {
+      try {
+        const response = await fetch('/api/persona/speak', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ creatorSlug: creator.slug, text: line, answerId, live }),
+        });
+        const data = (await response.json()) as { track?: VisemeTrack & { audioUrl: string | null } };
+        const track = data.track;
+        if (!track) return false;
+
+        if (track.audioUrl) {
+          const audio = audioRef.current ?? new Audio();
+          audioRef.current = audio;
+          audio.src = track.audioUrl;
+          audio.onplay = () => setSpeaking(true);
+          audio.onended = () => {
+            setSpeaking(false);
+            avatarRef.current?.stop();
+            levelRef.current = 0;
+          };
+          await audio.play();
+          avatarRef.current?.play(track, audio);
+          return true;
+        }
+
+        // No audio, but the estimated frames still shape the mouth in time
+        // with the browser voice.
+        avatarRef.current?.play(track, null);
+      } catch {
+        // Fall through to browser speech.
+      }
+      return false;
+    },
+    [creator.slug, live],
+  );
+
+  const speakInBrowser = useCallback((line: string) => {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(line);
@@ -167,6 +227,14 @@ export function PersonaStage({ creator, suggestions }: Props) {
     window.speechSynthesis.speak(utterance);
   }, []);
 
+  const speak = useCallback(
+    async (line: string, answerId?: string | null) => {
+      const played = await deliver(line, answerId);
+      if (!played) speakInBrowser(line);
+    },
+    [deliver, speakInBrowser],
+  );
+
   const ask = useCallback(
     async (input: { text?: string; constraints?: Record<string, unknown> }) => {
       setPending(true);
@@ -186,7 +254,7 @@ export function PersonaStage({ creator, suggestions }: Props) {
         const data = (await response.json()) as AskState;
         if (data.kind === 'answer' && data.answer) {
           setState({ kind: 'answer', answer: { ...data.answer, creator } });
-          speak(data.answer.renderedText);
+          void speak(data.answer.renderedText, data.answer.id);
         } else {
           setState(data);
           const line =
@@ -195,7 +263,7 @@ export function PersonaStage({ creator, suggestions }: Props) {
               : data.kind === 'signal'
                 ? data.signal?.text
                 : data.noMatch?.text;
-          if (line) speak(line);
+          if (line) void speak(line);
         }
       } finally {
         setPending(false);
@@ -231,10 +299,22 @@ export function PersonaStage({ creator, suggestions }: Props) {
 
       <div className="stage-inner">
         <header className="glass head">
-          <span className="orb" data-speaking={speaking} aria-hidden>
-            <span className="orb-ring" />
-            <span className="orb-core">{first[0]}</span>
-          </span>
+          {personaUrl && avatarOk !== false ? (
+            <span className="persona" data-speaking={speaking}>
+              <PersonaAvatar
+                ref={avatarRef}
+                modelUrl={personaUrl}
+                accent={creator.accent}
+                onReady={setAvatarOk}
+                className="persona-canvas"
+              />
+            </span>
+          ) : (
+            <span className="orb" data-speaking={speaking} aria-hidden>
+              <span className="orb-ring" />
+              <span className="orb-core">{first[0]}</span>
+            </span>
+          )}
           <span className="head-text">
             <strong>{creator.name}</strong>
             <span>{creator.niche}</span>
@@ -309,7 +389,7 @@ export function PersonaStage({ creator, suggestions }: Props) {
               <button type="button" className="glass btn" onClick={save} disabled={saved}>
                 {saved ? 'Saved' : 'Save this'}
               </button>
-              <button type="button" className="glass btn" onClick={() => speak(answer.renderedText)}>
+              <button type="button" className="glass btn" onClick={() => void speak(answer.renderedText, answer.id)}>
                 Hear it again
               </button>
               <Link className="glass btn" href={`/a/${answer.id}`}>

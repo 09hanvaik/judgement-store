@@ -11,10 +11,12 @@ const migrationsDir = resolve(here, '../src/db/migrations');
 
 /** Split on semicolons at statement ends; our migrations contain no literals with ';'. */
 function statements(sql: string): string[] {
+  // Strip comments first: a ';' inside one would otherwise split a statement.
   return sql
+    .replace(/--[^\n]*/g, '')
     .split(';')
     .map((s) => s.trim())
-    .filter((s) => s.replace(/--[^\n]*/g, '').trim().length > 0);
+    .filter((s) => s.length > 0);
 }
 
 async function main() {

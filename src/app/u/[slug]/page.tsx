@@ -24,6 +24,8 @@ export default async function PersonaPage({ params }: { params: Promise<{ slug: 
         niche: creator.niche,
       }}
       suggestions={suggestions}
+      personaUrl={creator.personaUrl}
+      live={process.env.PERSONA_LIVE === '1'}
     />
   );
 }

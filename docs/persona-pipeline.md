@@ -1,76 +1,101 @@
-# The persona surface, and what is not built
+# The 3D persona pipeline
 
 `/u/[slug]` is the audience surface: shader background, glass panels, and a
-speaking presence that reads the answer aloud. It runs with **no keys, no network
-and no third-party service**, which is the only reason it is safe to put on a demo
-path that the rest of this product promises never makes external calls.
+persona that speaks the answer. The answer itself is unchanged — it still comes
+from the deterministic router, still shows the rule that fired, still carries the
+disclosure. This pipeline only decides how those words are delivered.
 
-## What is real today
+## What is built
 
-| Piece | How it works | Keys needed |
+| Requirement | How | Keys |
 |---|---|---|
-| Answer | The same deterministic router every other surface uses | none |
-| Voice | The browser's own `SpeechSynthesis` | none |
-| Mouth / presence | A pulse envelope driven by speech start and end | none |
-| Background | A hand-written WebGL fragment shader, ~40 lines, no library | none |
-| Reduced motion | Shader time freezes, ring animation stops | none |
-| No WebGL | A CSS radial gradient carries the same look | none |
+| Single-step photo onboarding | Webcam capture or file upload at `/creator/[slug]/persona`, behind an explicit consent checkbox | none |
+| Photo to rigged persona | Pluggable provider (Avaturn, Didimo) returning a GLB with ARKit / Oculus viseme blendshapes | one vendor key, or Daytona |
+| Zero manual rigging | Nothing is modelled, boned or sculpted here — the provider ships the shapes | — |
+| Arbitrary text to speech | ElevenLabs `/with-timestamps` | `ELEVENLABS_API_KEY` + a consented `voice_id` |
+| Audio to expression sync | Character alignment mapped to visemes in `src/persona/visemes.ts`. No forced aligner, no motion capture | — |
+| Autonomous secondary dynamics | Procedural blink, gaze drift, head tilt and a resting float — idle and while speaking | none |
+| In-browser 3D rendering | three.js GLTF loader driving morph targets. No extension, no install | none |
+| Performance first | Capped device pixel ratio, one light rig, no post-processing, smoothed blendshape weights | none |
+| Low-latency playback | Cache-first: a pre-generated track starts immediately | none |
+| Isolated cloud execution | `daytona/service.mjs` — one file, two endpoints, no state | Daytona |
+| Secure credential proxying | Only `DAYTONA_API_KEY` reaches the web app; vendor keys live in the sandbox | Daytona |
 
-The amplitude envelope is a **stand-in, not a lip-sync**. It is honest about being
-one: it reacts to whether she is speaking, not to which phoneme she is on.
+## How lip-sync works without a forced aligner
 
-## What is specified but not built
+ElevenLabs' `/with-timestamps` endpoint returns the audio **and** per-character
+start and end times in one response. That single fact removes a whole stage from
+the pipeline: there is no separate alignment pass, no phoneme extraction service,
+and no pre-recorded motion capture.
 
-The 3D persona spec — single-photo onboarding, automated rigging, TTS, viseme
-mapping, autonomous blinks and gaze, Daytona orchestration — is not in this repo.
-It needs services and credentials that are not configured here, and every one of
-them would put a live third-party call on the answer path.
-
-That trade is the whole argument of this product, so it was not made quietly.
-
-### Where it would slot in
-
-The seam is deliberately narrow. `PersonaStage` needs exactly two things from a
-persona implementation:
-
-```ts
-// 1. something to render
-<PersonaView personaId={...} />
-
-// 2. something to drive it
-speak(text: string): {
-  onStart(): void
-  onFrame(level: number, viseme?: string): void   // today: an envelope
-  onEnd(): void
-}
+```
+text ──► ElevenLabs /with-timestamps ──► { audio_base64, alignment }
+                                              │
+                          alignmentToVisemes( alignment )
+                                              │
+                                    [ { t, v, w }, … ]
+                                              │
+                        three.js morph targets, driven by audio.currentTime
 ```
 
-Swapping the stand-in for a rigged head means replacing `speak()` and the `.orb`
-element. Nothing else on the page changes, because the answer, the rule and the
-disclosure are already independent of how the words are delivered.
+`src/persona/visemes.ts` is pure and shared by the generator script and the
+renderer, so what is baked offline and what plays in the browser cannot drift.
+It is covered by 13 tests: monotonic timing, weights inside 0..1, digraphs
+(`th`, `ch`, `sh`) reading as one shape, one mouth-close per gap rather than per
+space, and determinism.
 
-A real build would need, roughly:
+## Ready Player Me shut down mid-build
 
-1. **Photo → avatar.** A hosted avatar-generation service that returns a rigged
-   GLB with ARKit-style blendshapes. Zero manual rigging is a service promise, not
-   something to implement.
-2. **Text → audio + timings.** A TTS provider that returns word or phoneme
-   timings alongside the audio, otherwise the timings have to be inferred.
-3. **Timings → visemes.** A phoneme-to-blendshape map applied on the render loop.
-4. **Render.** `three.js` with a GLTF loader, driving morph targets.
-5. **Idle behaviour.** Procedural blink, gaze drift and micro head-tilt on a timer
-   — the cheapest part, and the one that does most for believability.
-6. **Daytona.** An isolated container holding the orchestration and, importantly,
-   the credentials: the browser would call Daytona, and Daytona would call the
-   avatar and speech providers, so no token is ever in client code.
+That is why avatar generation is a provider interface and not a vendor
+integration. `AVATAR_PROVIDER` selects an adapter, and the `manual` path needs no
+vendor at all: paste any HTTPS `.glb` carrying viseme blendshapes into the
+onboarding screen and the full pipeline runs. Swapping vendors is a config change
+plus one adapter function.
 
-### What that costs the product
+## The rule that did not bend
 
-Steps 2 and 3 are on the request path. The moment they are, an answer depends on a
-network round trip and an external provider's uptime, and the claim that the whole
-thing works offline stops being true.
+Generation stays **off** the answer path.
 
-The honest version is to keep generation **offline**, the way answer audio already
-works: pre-generate the persona's delivery for the seeded demo answers with
-`npm run generate-audio`, cache it, and let the browser fall back to its own voice
-for anything not yet cached. Answers stay deterministic; only the polish is async.
+`POST /api/persona/speak` is cache-first. A pre-generated track — written by
+`npm run generate-persona` into `public/persona` and recorded in the
+`persona_assets` table — is served with no external call at all. Live synthesis
+is opt-in behind `PERSONA_LIVE=1` and exists only for lines nobody pre-generated.
+If a provider is slow, missing or down, the response is marked `estimated` and
+the browser speaks the line with an approximate mouth. A visitor never sees an
+error because a vendor had a bad day.
+
+So: run `npm run generate-persona` before a demo, and the persona speaks with
+zero external calls while anyone is watching.
+
+## Setup
+
+```bash
+npm run db:reset && npm run dev
+```
+
+1. Open `/creator/aditi/persona`. It reports exactly what is configured.
+2. Capture or upload a portrait, tick consent, generate — or paste a `.glb` URL.
+3. Set a consented `voice_id` on the creator row for speech.
+4. Pre-generate the demo lines:
+
+```bash
+npm run generate-persona -- --creator aditi
+```
+
+5. Open `/u/aditi`.
+
+With none of that configured the page still works: the stand-in orb, the
+browser's own voice, and an estimated mouth.
+
+## Still honest about
+
+- The `estimated` mouth is a speaking-rate assumption, not a measurement. It is
+  labelled `estimated` in the API response for exactly that reason.
+- Viseme mapping is letter-based, not phoneme-based. It reads well at
+  conversational speed and is deliberately coarse — stylised beats uncanny.
+- Neither vendor adapter has been run against a live account from this machine,
+  because no keys were available here. The request shapes follow each vendor's
+  documented API, and the failure path is the one that has been exercised: any
+  error falls back to browser speech rather than surfacing to the visitor.
+- A consented `voice_id` is a real gate, not a formality. Without one, speech
+  synthesis is skipped entirely regardless of which keys are present.

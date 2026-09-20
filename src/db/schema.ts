@@ -17,6 +17,7 @@ export const creators = sqliteTable('creators', {
   voiceId: text('voice_id'),
   portraitUrl: text('portrait_url'),
   accent: text('accent').notNull().default('#12100E'),
+  personaUrl: text('persona_url'),
   disclosureText: text('disclosure_text').notNull(),
   styleGuide: text('style_guide').notNull(),
   createdAt: text('created_at').notNull(),
@@ -215,4 +216,21 @@ export const todos = sqliteTable(
     status: text('status').notNull().default('open'),
   },
   (t) => ({ byCreator: index('todos_creator_idx').on(t.creatorId) }),
+);
+
+/** Pre-generated speech + viseme tracks. Offline artefacts, never generated on the answer path. */
+export const personaAssets = sqliteTable(
+  'persona_assets',
+  {
+    id: text('id').primaryKey(),
+    creatorId: text('creator_id').notNull(),
+    answerId: text('answer_id'),
+    textHash: text('text_hash').notNull(),
+    audioUrl: text('audio_url').notNull(),
+    visemes: text('visemes').notNull(),
+    durationSec: real('duration_sec').notNull(),
+    source: text('source').notNull(),
+    createdAt: text('created_at').notNull(),
+  },
+  (t) => ({ byCreator: index('persona_assets_creator_idx').on(t.creatorId) }),
 );

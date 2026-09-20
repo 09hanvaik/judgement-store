@@ -14,7 +14,8 @@
     "db:reset": "tsx scripts/reset.ts && tsx scripts/migrate.ts && tsx scripts/seed.ts",
     "generate-audio": "node scripts/generate-audio.mjs",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "generate-persona": "node scripts/generate-persona.mjs"
   },
   "dependencies": {
     "@libsql/client": "^0.15.9",
@@ -24,12 +25,15 @@
     "next": "^15.5.25",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "server-only": "^0.0.1",
+    "three": "^0.170.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
     "@types/node": "^20.17.12",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
+    "@types/three": "^0.170.0",
     "autoprefixer": "^10.4.20",
     "drizzle-kit": "^0.30.2",
     "postcss": "^8.4.49",

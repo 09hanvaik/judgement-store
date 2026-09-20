@@ -10,3 +10,5 @@ next-env.d.ts
 public/audio/*.mp3
 data/test.db
 data/test.db-*
+public/persona/*.mp3
+public/persona/*.json
