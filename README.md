@@ -75,6 +75,9 @@ npm test
                                                     /creator/[slug]
 ```
 
+Rendered versions of these three views live in [`docs/`](./docs/README.md): the system,
+the nine-stage answer path, and the boundary showing where a model may and may not run.
+
 One codebase, creators as data. Adding a creator — or absorbing a twist at the
 16:00 intelligence drop — is an edit to `data/<slug>.json` plus `npm run db:reset`.
 No code changes.
