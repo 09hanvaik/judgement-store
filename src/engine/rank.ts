@@ -143,6 +143,22 @@ export function rank({ units, items, constraints, outcome, mode }: RankInput): R
     if (picks.length >= cap) break;
   }
 
+  // Anything her rules removed is named, even when no unit for it was in play —
+  // "Good. Not £62 good." is the most useful thing she says about Glass Drop.
+  const noted = new Set(skipNotes.map((note) => note.item_id).filter(Boolean) as string[]);
+  for (const [itemId, rule] of outcome.exclusionReason) {
+    if (noted.has(itemId)) continue;
+    const item = itemById.get(itemId);
+    if (!item) continue;
+    skipNotes.push({
+      item_id: itemId,
+      item_name: item.name,
+      text: rule.ruleText,
+      rule_id: rule.id,
+    });
+    noted.add(itemId);
+  }
+
   skipNotes.sort((a, b) => (a.item_name + a.text).localeCompare(b.item_name + b.text));
 
   // Per-item prices can each clear the ceiling while the basket does not. Say so.
