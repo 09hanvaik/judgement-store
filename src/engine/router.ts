@@ -309,11 +309,12 @@ export function route(snapshot: Snapshot, input: RouterInput): RouterResult {
   const fallbackText = defaultText(creator.name, picks);
   const rendered = render({ template, slots, style: creator.styleGuide, seed: id, fallbackText });
 
+  // The rule that decided the pick leads; the other rules that fired follow.
   const firedRules = dedupeRules([
-    ...outcome.fired.map((r) => ({ id: r.id, text: r.ruleText })),
     ...picks
       .filter((p) => p.unit.ruleId)
       .map((p) => ({ id: p.unit.ruleId as string, text: p.unit.ruleText })),
+    ...outcome.fired.map((r) => ({ id: r.id, text: r.ruleText })),
   ]);
 
   return {
