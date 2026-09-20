@@ -1,0 +1,10 @@
+node_modules
+.next
+out
+data/app.db
+data/app.db-*
+.env.local
+.env
+*.tsbuildinfo
+next-env.d.ts
+public/audio/*.mp3
