@@ -16,8 +16,15 @@ export interface DemoStep {
   constraints?: Record<string, unknown>;
 }
 
+export interface DemoScript {
+  name: string;
+  archetype: string;
+  blurb: string;
+  steps: DemoStep[];
+}
+
 export interface CaseFile {
-  demo?: { archetype: string; steps: DemoStep[] };
+  demos?: DemoScript[];
   archetypes?: Array<{ name: string; age: number; label: string; demo_text: string }>;
   inbox?: Array<{ text: string; expected_mode: string; expect_kind?: string; expect_signal?: string }>;
   creator?: { reply_seconds_note?: string; handle_summary?: string };

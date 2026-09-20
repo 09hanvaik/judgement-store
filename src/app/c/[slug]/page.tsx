@@ -64,7 +64,7 @@ export default async function CreatorPage({ params }: { params: Promise<{ slug: 
         </p>
       </header>
 
-      <AskPanel creator={view} suggestions={suggestions} demo={caseFile?.demo ?? null} />
+      <AskPanel creator={view} suggestions={suggestions} demos={caseFile?.demos ?? []} />
 
       <nav className="mt-10 flex flex-wrap gap-3 text-sm">
         <Link className="underline underline-offset-2" href={`/c/${creator.slug}/saves`}>

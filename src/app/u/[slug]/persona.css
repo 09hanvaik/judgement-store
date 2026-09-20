@@ -285,3 +285,19 @@
 @media (max-width: 480px) {
   .persona-hero { height: 220px; }
 }
+
+/* Two demo scripts: the one she answers, and the one she declines. */
+.demo-scripts { display: flex; flex-direction: column; gap: 10px; }
+
+.demo-script { padding: 14px 16px; }
+
+.demo-title {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.demo-blurb { margin: 4px 0 0; font-size: 13px; line-height: 1.45; opacity: 0.62; }

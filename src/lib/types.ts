@@ -45,6 +45,16 @@ export interface StyleGuide {
   ask_back_questions: string[];
   /** Her single filter question, used when the request is too vague to route. */
   filter_question?: string;
+  /**
+   * How she declines, in her words. A refusal is still her speaking, so it is
+   * authored per creator rather than emitted by the engine in a house style.
+   */
+  voice?: {
+    no_match?: string;
+    vague?: string;
+    trust?: string;
+    delayed_intent?: string;
+  };
 }
 
 /** The situation a judgement unit applies to. Matched by typed predicates only. */

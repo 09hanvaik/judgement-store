@@ -7,6 +7,8 @@ import { getVisitorId, logEvent, markVisit } from '@/lib/visitor';
 import type { CardAnswer, CardCreator } from '@/lib/card';
 import type { PersonaHandle } from '@/persona/PersonaAvatar';
 import type { VisemeTrack } from '@/persona/visemes';
+import { DemoScripts } from './DemoScripts';
+import type { DemoScript, DemoStep } from '@/lib/casefile';
 
 // three.js only ships to browsers that actually have a persona to render.
 const PersonaAvatar = dynamic(() => import('@/persona/PersonaAvatar').then((m) => m.PersonaAvatar), {
@@ -30,6 +32,7 @@ interface Props {
   personaUrl: string | null;
   /** Opt-in live synthesis for lines that were never pre-generated. */
   live: boolean;
+  demos: DemoScript[];
 }
 
 interface AskState {
@@ -70,7 +73,7 @@ function hexToVec(hex: string): [number, number, number] {
   ];
 }
 
-export function PersonaStage({ creator, suggestions, personaUrl, live }: Props) {
+export function PersonaStage({ creator, suggestions, personaUrl, live, demos }: Props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const levelRef = useRef(0);
   const avatarRef = useRef<PersonaHandle | null>(null);
@@ -81,6 +84,7 @@ export function PersonaStage({ creator, suggestions, personaUrl, live }: Props) 
   const [pending, setPending] = useState(false);
   const [speaking, setSpeaking] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [demoStep, setDemoStep] = useState<string | null>(null);
   const first = creator.name.split(' ')[0];
 
   useEffect(() => {
@@ -418,6 +422,19 @@ export function PersonaStage({ creator, suggestions, personaUrl, live }: Props) 
             {pending ? '…' : 'Ask'}
           </button>
         </form>
+
+        <DemoScripts
+          scripts={demos}
+          accent={creator.accent}
+          activeStep={demoStep}
+          disabled={pending}
+          variant="glass"
+          onRun={(step: DemoStep, key: string) => {
+            setDemoStep(key);
+            if (step.text) setText(step.text);
+            void ask({ text: step.text, constraints: step.constraints });
+          }}
+        />
 
         <div className="row wrap">
           {suggestions.map((suggestion) => (

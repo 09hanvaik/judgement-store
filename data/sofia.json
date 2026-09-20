@@ -19,7 +19,11 @@
         "say when something is not worth it",
         "keep the list short"
       ],
-      "donts": ["generic assistant language", "corporate hedging", "long lists of links"],
+      "donts": [
+        "generic assistant language",
+        "corporate hedging",
+        "long lists of links"
+      ],
       "approved_fillers": [],
       "max_fillers_per_answer": 1,
       "sentence_length_hint": 20,
@@ -40,17 +44,26 @@
         "What size are you usually?",
         "Where are you wearing it?",
         "What is the budget?"
-      ]
+      ],
+      "voice": {
+        "no_match": "I have not given a verdict on that one yet, and I would rather tell you that than make one up. Ask me about something I actually wear.",
+        "vague": "Tell me where you are wearing it and I will give you something specific.",
+        "trust": "That is the nicest thing you could say, honestly. Nothing you need to do here.",
+        "delayed_intent": "Take your time. Three days of thinking about it is usually a good sign."
+      }
     }
   },
-
   "items": [
     {
       "id": "black-blazer",
       "kind": "jacket",
       "name": "Black blazer",
       "price_gbp": 145,
-      "attrs": { "size": "UK 8", "style": "tailored", "availability": "in stock" },
+      "attrs": {
+        "size": "UK 8",
+        "style": "tailored",
+        "availability": "in stock"
+      },
       "score": null,
       "note": "buy once, wear forever",
       "source_ref": "case file: Sofia Bennett item table and notebook verdicts",
@@ -71,7 +84,12 @@
           "priority": 9
         },
         "constrain": {
-          "situation": { "size": ["8", "UK 8"] },
+          "situation": {
+            "size": [
+              "8",
+              "UK 8"
+            ]
+          },
           "verdict": "buy",
           "rule_text": "She is a UK 8 in this one, and that is from her own table rather than a size chart."
         },
@@ -86,7 +104,11 @@
       "kind": "jacket",
       "name": "Vintage leather jacket",
       "price_gbp": 180,
-      "attrs": { "size": "UK 8", "style": "vintage", "availability": "one-off" },
+      "attrs": {
+        "size": "UK 8",
+        "style": "vintage",
+        "availability": "one-off"
+      },
       "score": null,
       "note": "great, but warm",
       "source_ref": "case file: Sofia Bennett item table and notebook verdicts",
@@ -107,7 +129,11 @@
       "kind": "skirt",
       "name": "Silk skirt",
       "price_gbp": 95,
-      "attrs": { "size": "UK 8", "style": "minimal", "availability": "in stock" },
+      "attrs": {
+        "size": "UK 8",
+        "style": "minimal",
+        "availability": "in stock"
+      },
       "score": null,
       "note": "best with trainers",
       "source_ref": "case file: Sofia Bennett item table",
@@ -119,7 +145,9 @@
           "priority": 9,
           "status": "approved"
         },
-        "lookup": { "rule_text": "Silk skirt, £95, UK 8, minimal, in stock." },
+        "lookup": {
+          "rule_text": "Silk skirt, £95, UK 8, minimal, in stock."
+        },
         "decide": {
           "verdict": null,
           "rule_text": "Whether she would tell you to buy this is not recorded.",
@@ -133,7 +161,11 @@
       "kind": "top",
       "name": "White tee",
       "price_gbp": 35,
-      "attrs": { "size": "UK 8", "style": "basic", "availability": "in stock" },
+      "attrs": {
+        "size": "UK 8",
+        "style": "basic",
+        "availability": "in stock"
+      },
       "score": null,
       "note": "£35 is enough",
       "source_ref": "case file: Sofia Bennett item table and notebook verdicts",
@@ -153,11 +185,18 @@
           "rule_text": "She does not spend up here, and she says so plainly."
         },
         "constrain": {
-          "situation": { "size": ["8", "UK 8"] },
+          "situation": {
+            "size": [
+              "8",
+              "UK 8"
+            ]
+          },
           "verdict": "buy",
           "rule_text": "UK 8 in her table."
         },
-        "lookup": { "rule_text": "White tee, £35, UK 8, basic, in stock." }
+        "lookup": {
+          "rule_text": "White tee, £35, UK 8, basic, in stock."
+        }
       }
     },
     {
@@ -165,7 +204,11 @@
       "kind": "shoes",
       "name": "Loafers",
       "price_gbp": 120,
-      "attrs": { "size": "UK 5", "style": "classic", "availability": "in stock" },
+      "attrs": {
+        "size": "UK 5",
+        "style": "classic",
+        "availability": "in stock"
+      },
       "score": null,
       "note": "expensiveish, worth it",
       "source_ref": "case file: Sofia Bennett item table and notebook verdicts",
@@ -185,11 +228,18 @@
           "rule_text": "A shoe she keeps forever beats a shoe she photographs once."
         },
         "constrain": {
-          "situation": { "size": ["5", "UK 5"] },
+          "situation": {
+            "size": [
+              "5",
+              "UK 5"
+            ]
+          },
           "verdict": "buy",
           "rule_text": "She is a UK 5 in shoes, which is not the same as her UK 8 in clothes."
         },
-        "lookup": { "rule_text": "Loafers, £120, UK 5, classic, in stock." }
+        "lookup": {
+          "rule_text": "Loafers, £120, UK 5, classic, in stock."
+        }
       }
     },
     {
@@ -197,12 +247,18 @@
       "kind": "shoes",
       "name": "Red slingback",
       "price_gbp": 89,
-      "attrs": { "size": "UK 5", "style": "statement", "availability": "in stock" },
+      "attrs": {
+        "size": "UK 5",
+        "style": "statement",
+        "availability": "in stock"
+      },
       "score": null,
       "note": "date-night shoe",
       "source_ref": "case file: Sofia Bennett item table",
       "units": {
-        "lookup": { "rule_text": "Red slingback, £89, UK 5, statement, in stock." },
+        "lookup": {
+          "rule_text": "Red slingback, £89, UK 5, statement, in stock."
+        },
         "decide": {
           "verdict": null,
           "rule_text": "She calls it a date-night shoe. She has not said whether to buy it.",
@@ -216,12 +272,18 @@
       "kind": "top",
       "name": "Grey knit",
       "price_gbp": 78,
-      "attrs": { "size": "UK S", "style": "minimal", "availability": "low stock" },
+      "attrs": {
+        "size": "UK S",
+        "style": "minimal",
+        "availability": "low stock"
+      },
       "score": null,
       "note": "soft but pills",
       "source_ref": "case file: Sofia Bennett item table",
       "units": {
-        "lookup": { "rule_text": "Grey knit, £78, UK S, minimal, low stock." },
+        "lookup": {
+          "rule_text": "Grey knit, £78, UK S, minimal, low stock."
+        },
         "decide": {
           "verdict": null,
           "rule_text": "Soft but pills is a description, not a verdict, and she has not given one.",
@@ -235,12 +297,18 @@
       "kind": "trousers",
       "name": "Wide-leg denim",
       "price_gbp": 110,
-      "attrs": { "size": "UK 8", "style": "relaxed", "availability": "in stock" },
+      "attrs": {
+        "size": "UK 8",
+        "style": "relaxed",
+        "availability": "in stock"
+      },
       "score": null,
       "note": "my actual uniform",
       "source_ref": "case file: Sofia Bennett item table",
       "units": {
-        "lookup": { "rule_text": "Wide-leg denim, £110, UK 8, relaxed, in stock." },
+        "lookup": {
+          "rule_text": "Wide-leg denim, £110, UK 8, relaxed, in stock."
+        },
         "personal": {
           "verdict": null,
           "rule_text": "She calls this her actual uniform, which reads like a yes but was never given as one.",
@@ -250,7 +318,6 @@
       }
     }
   ],
-
   "rules": [
     {
       "id": "R-SOFIA-GUARD-CURATE",
@@ -270,171 +337,388 @@
     },
     {
       "id": "R-SOFIA-ADAPT-ASK",
-      "mode_scope": ["adapt"],
-      "conditions": [{ "field": "owned_item_ids", "op": "exists", "value": false },
-        { "field": "keyword_hits", "op": "contains", "value": "adapt.i_live_in", "negate": true }],
-      "effect": { "ask_back": "What are you already wearing on repeat?" },
+      "mode_scope": [
+        "adapt"
+      ],
+      "conditions": [
+        {
+          "field": "owned_item_ids",
+          "op": "exists",
+          "value": false
+        },
+        {
+          "field": "keyword_hits",
+          "op": "contains",
+          "value": "adapt.i_live_in",
+          "negate": true
+        }
+      ],
+      "effect": {
+        "ask_back": "What are you already wearing on repeat?"
+      },
       "rule_text": "She restyles what you own. Until she knows what that is, she asks rather than sells you something new.",
       "weight": 92
     },
     {
       "id": "R-SOFIA-TRAINERS",
-      "mode_scope": ["adapt"],
-      "conditions": [{ "field": "keyword_hits", "op": "contains", "value": "adapt.i_live_in" }],
-      "effect": { "include_item_ids": ["silk-skirt"], "cap": 1, "template_id": "sofia.adapt.trainers" },
+      "mode_scope": [
+        "adapt"
+      ],
+      "conditions": [
+        {
+          "field": "keyword_hits",
+          "op": "contains",
+          "value": "adapt.i_live_in"
+        }
+      ],
+      "effect": {
+        "include_item_ids": [
+          "silk-skirt"
+        ],
+        "cap": 1,
+        "template_id": "sofia.adapt.trainers"
+      },
       "rule_text": "Trainers are not a problem to solve. The silk skirt is the piece her own notes already pair with them.",
       "weight": 94
     },
     {
       "id": "R-SOFIA-SIZE",
-      "mode_scope": ["constrain"],
-      "conditions": [{ "field": "keyword_hits", "op": "contains", "value": "constrain.size" }],
-      "effect": { "template_id": "sofia.constrain.size", "cap": 2 },
+      "mode_scope": [
+        "constrain"
+      ],
+      "conditions": [
+        {
+          "field": "keyword_hits",
+          "op": "contains",
+          "value": "constrain.size"
+        }
+      ],
+      "effect": {
+        "template_id": "sofia.constrain.size",
+        "cap": 2
+      },
       "rule_text": "Size answers come from what she actually wears, and clothes and shoes do not share a number.",
       "weight": 88
     },
     {
       "id": "R-SOFIA-BUDGET",
-      "mode_scope": ["budget"],
-      "conditions": [{ "field": "budget_gbp", "op": "lte", "value": 120 }],
-      "effect": { "cap": 2, "template_id": "sofia.budget.under" },
+      "mode_scope": [
+        "budget"
+      ],
+      "conditions": [
+        {
+          "field": "budget_gbp",
+          "op": "lte",
+          "value": 120
+        }
+      ],
+      "effect": {
+        "cap": 2,
+        "template_id": "sofia.budget.under"
+      },
       "rule_text": "Under £120 she does not hunt for a lookalike of the expensive thing. She names what she already stands behind at that price.",
       "weight": 85
     },
     {
       "id": "R-SOFIA-WHERE",
-      "mode_scope": ["lookup"],
-      "conditions": [{ "field": "keyword_hits", "op": "contains", "value": "lookup.where_is" }],
-      "effect": { "cap": 1, "template_id": "sofia.lookup.item" },
+      "mode_scope": [
+        "lookup"
+      ],
+      "conditions": [
+        {
+          "field": "keyword_hits",
+          "op": "contains",
+          "value": "lookup.where_is"
+        }
+      ],
+      "effect": {
+        "cap": 1,
+        "template_id": "sofia.lookup.item"
+      },
       "rule_text": "Where-is questions get the item, the size and the price she has on record. There are no affiliate links in this build.",
       "weight": 84
     },
     {
       "id": "R-SOFIA-PERSONAL",
-      "mode_scope": ["personal"],
+      "mode_scope": [
+        "personal"
+      ],
       "conditions": [],
-      "effect": { "cap": 1, "template_id": "sofia.personal.mine" },
+      "effect": {
+        "cap": 1,
+        "template_id": "sofia.personal.mine"
+      },
       "rule_text": "Asked what she would buy, she names the piece she keeps, not the piece that gets the most attention.",
       "weight": 70
     },
     {
       "id": "R-SOFIA-VERDICT",
-      "mode_scope": ["verdict"],
+      "mode_scope": [
+        "verdict"
+      ],
       "conditions": [],
-      "effect": { "cap": 1 },
+      "effect": {
+        "cap": 1
+      },
       "rule_text": "Worth-it questions get her verdict and the caveat that comes with it.",
       "weight": 70
     },
     {
       "id": "R-SOFIA-NARROW",
-      "mode_scope": ["narrow"],
+      "mode_scope": [
+        "narrow"
+      ],
       "conditions": [],
-      "effect": { "cap": 2, "template_id": "sofia.narrow.two" },
+      "effect": {
+        "cap": 2,
+        "template_id": "sofia.narrow.two"
+      },
       "rule_text": "Two is already more than she likes linking. She will not go past it.",
       "weight": 68
     }
   ],
-
   "templates": [
     {
       "id": "sofia.decide.pick",
       "mode": "decide",
-      "slots": ["pick1_name", "pick1_note"],
+      "slots": [
+        "pick1_name",
+        "pick1_note"
+      ],
       "text": "{{pick1_name}}, {{pick1_price}}. {{pick1_note}} That is the whole recommendation.",
       "audio_key": "sofia-decide-pick"
     },
     {
       "id": "sofia.budget.under",
       "mode": "budget",
-      "slots": ["pick1_name", "budget"],
+      "slots": [
+        "pick1_name",
+        "budget"
+      ],
       "text": "Under {{budget}}: {{pick1_name}} at {{pick1_price}}. {{pick1_note}} And {{pick2_name}} at {{pick2_price}}. {{pick2_note}} I am not going to find you a cheap copy of something expensive.",
       "audio_key": "sofia-budget-under"
     },
     {
       "id": "sofia.narrow.two",
       "mode": "narrow",
-      "slots": ["pick1_name", "pick2_name"],
+      "slots": [
+        "pick1_name",
+        "pick2_name"
+      ],
       "text": "Two. {{pick1_name}} at {{pick1_price}} and {{pick2_name}} at {{pick2_price}}. {{pick1_note}} Those are the ones I would text my sister about.",
       "audio_key": "sofia-narrow-two"
     },
     {
       "id": "sofia.personal.mine",
       "mode": "personal",
-      "slots": ["pick1_name", "pick1_note"],
+      "slots": [
+        "pick1_name",
+        "pick1_note"
+      ],
       "text": "If it were my money: {{pick1_name}}, {{pick1_price}}. {{pick1_note}}",
       "audio_key": "sofia-personal-mine"
     },
     {
       "id": "sofia.verdict.caveat",
       "mode": "verdict",
-      "slots": ["pick1_name", "pick1_caveat"],
+      "slots": [
+        "pick1_name",
+        "pick1_caveat"
+      ],
       "text": "{{pick1_name}} at {{pick1_price}}: {{pick1_note}} {{pick1_caveat}} So it is a maybe, not a yes.",
       "audio_key": "sofia-verdict-caveat"
     },
     {
       "id": "sofia.verdict.worth",
       "mode": "verdict",
-      "slots": ["pick1_name", "pick1_note"],
+      "slots": [
+        "pick1_name",
+        "pick1_note"
+      ],
       "text": "{{pick1_name}} at {{pick1_price}}: yes. {{pick1_note}}",
       "audio_key": "sofia-verdict-worth"
     },
     {
       "id": "sofia.adapt.trainers",
       "mode": "adapt",
-      "slots": ["pick1_name", "pick1_note_raw"],
+      "slots": [
+        "pick1_name",
+        "pick1_note_raw"
+      ],
       "text": "I would not change the shoes. {{pick1_name}}, {{pick1_price}}. Best with trainers is my own note on it, not a compromise.",
       "audio_key": "sofia-adapt-trainers"
     },
     {
       "id": "sofia.adapt.generic",
       "mode": "adapt",
-      "slots": ["pick1_name", "owned_name"],
+      "slots": [
+        "pick1_name",
+        "owned_name"
+      ],
       "text": "You already have {{owned_name}}, so I am not sending you back for another one. {{pick1_name}}, {{pick1_price}}. {{pick1_note}}",
       "audio_key": "sofia-adapt-generic"
     },
     {
       "id": "sofia.constrain.size",
       "mode": "constrain",
-      "slots": ["pick1_name", "pick1_size"],
+      "slots": [
+        "pick1_name",
+        "pick1_size"
+      ],
       "text": "{{pick1_name}}: {{pick1_price}}. {{pick1_note}} I am a {{pick1_size}} in this and a {{pick2_size}} in the {{pick2_name}}. Clothes and shoes do not share a number on me, so check both.",
       "audio_key": "sofia-constrain-size"
     },
     {
       "id": "sofia.lookup.item",
       "mode": "lookup",
-      "slots": ["pick1_name"],
+      "slots": [
+        "pick1_name"
+      ],
       "text": "{{pick1_name}}, {{pick1_price}}. {{pick1_note}} {{pick1_caveat}}",
       "audio_key": "sofia-lookup-item"
     }
   ],
-
   "cohort": {
     "label": "Sample from case file, not live",
     "source_ref": "case file: Sofia Bennett audience cohort table",
     "rows": [
-      { "label": "U-014", "saves": 7, "shares": 2, "returns": 4, "link_click": false, "converted": true, "lag_days": 5 },
-      { "label": "U-031", "saves": 2, "shares": 0, "returns": 1, "link_click": true, "converted": true, "lag_days": 0.4 },
-      { "label": "U-067", "saves": 5, "shares": 3, "returns": 3, "link_click": false, "converted": true, "lag_days": 4 },
-      { "label": "U-082", "saves": 1, "shares": 0, "returns": 1, "link_click": true, "converted": false, "lag_days": null },
-      { "label": "U-104", "saves": 8, "shares": 5, "returns": 6, "link_click": false, "converted": true, "lag_days": 7 },
-      { "label": "U-121", "saves": 3, "shares": 1, "returns": 2, "link_click": false, "converted": true, "lag_days": 2 },
-      { "label": "U-139", "saves": 6, "shares": 4, "returns": 3, "link_click": false, "converted": true, "lag_days": 3 },
-      { "label": "U-166", "saves": 1, "shares": 0, "returns": 1, "link_click": true, "converted": false, "lag_days": null },
-      { "label": "U-204", "saves": 9, "shares": 6, "returns": 7, "link_click": false, "converted": true, "lag_days": 6 },
-      { "label": "U-219", "saves": 4, "shares": 0, "returns": 2, "link_click": true, "converted": true, "lag_days": 1 },
-      { "label": "U-241", "saves": 2, "shares": 2, "returns": 2, "link_click": false, "converted": false, "lag_days": null },
-      { "label": "U-288", "saves": 7, "shares": 4, "returns": 5, "link_click": false, "converted": true, "lag_days": 4 }
+      {
+        "label": "U-014",
+        "saves": 7,
+        "shares": 2,
+        "returns": 4,
+        "link_click": false,
+        "converted": true,
+        "lag_days": 5
+      },
+      {
+        "label": "U-031",
+        "saves": 2,
+        "shares": 0,
+        "returns": 1,
+        "link_click": true,
+        "converted": true,
+        "lag_days": 0.4
+      },
+      {
+        "label": "U-067",
+        "saves": 5,
+        "shares": 3,
+        "returns": 3,
+        "link_click": false,
+        "converted": true,
+        "lag_days": 4
+      },
+      {
+        "label": "U-082",
+        "saves": 1,
+        "shares": 0,
+        "returns": 1,
+        "link_click": true,
+        "converted": false,
+        "lag_days": null
+      },
+      {
+        "label": "U-104",
+        "saves": 8,
+        "shares": 5,
+        "returns": 6,
+        "link_click": false,
+        "converted": true,
+        "lag_days": 7
+      },
+      {
+        "label": "U-121",
+        "saves": 3,
+        "shares": 1,
+        "returns": 2,
+        "link_click": false,
+        "converted": true,
+        "lag_days": 2
+      },
+      {
+        "label": "U-139",
+        "saves": 6,
+        "shares": 4,
+        "returns": 3,
+        "link_click": false,
+        "converted": true,
+        "lag_days": 3
+      },
+      {
+        "label": "U-166",
+        "saves": 1,
+        "shares": 0,
+        "returns": 1,
+        "link_click": true,
+        "converted": false,
+        "lag_days": null
+      },
+      {
+        "label": "U-204",
+        "saves": 9,
+        "shares": 6,
+        "returns": 7,
+        "link_click": false,
+        "converted": true,
+        "lag_days": 6
+      },
+      {
+        "label": "U-219",
+        "saves": 4,
+        "shares": 0,
+        "returns": 2,
+        "link_click": true,
+        "converted": true,
+        "lag_days": 1
+      },
+      {
+        "label": "U-241",
+        "saves": 2,
+        "shares": 2,
+        "returns": 2,
+        "link_click": false,
+        "converted": false,
+        "lag_days": null
+      },
+      {
+        "label": "U-288",
+        "saves": 7,
+        "shares": 4,
+        "returns": 5,
+        "link_click": false,
+        "converted": true,
+        "lag_days": 4
+      }
     ]
   },
-
   "case_stats": [
-    { "stat": "High-value purchasers who did not click her affiliate link", "value": "62%", "source_ref": "case file: Sofia Bennett brief" },
-    { "stat": "Median days between saving and purchase", "value": "3.4 days", "source_ref": "case file: Sofia Bennett brief" },
-    { "stat": "Purchases that followed a share to a friend or partner", "value": "41%", "source_ref": "case file: Sofia Bennett brief" },
-    { "stat": "Purchase rate when a person saved 3+ looks first", "value": "2.2x higher", "source_ref": "case file: Sofia Bennett brief" },
-    { "stat": "DMs and comments a month", "value": "3.1K+", "source_ref": "case file: Sofia Bennett brief" }
+    {
+      "stat": "High-value purchasers who did not click her affiliate link",
+      "value": "62%",
+      "source_ref": "case file: Sofia Bennett brief"
+    },
+    {
+      "stat": "Median days between saving and purchase",
+      "value": "3.4 days",
+      "source_ref": "case file: Sofia Bennett brief"
+    },
+    {
+      "stat": "Purchases that followed a share to a friend or partner",
+      "value": "41%",
+      "source_ref": "case file: Sofia Bennett brief"
+    },
+    {
+      "stat": "Purchase rate when a person saved 3+ looks first",
+      "value": "2.2x higher",
+      "source_ref": "case file: Sofia Bennett brief"
+    },
+    {
+      "stat": "DMs and comments a month",
+      "value": "3.1K+",
+      "source_ref": "case file: Sofia Bennett brief"
+    }
   ],
-
   "todos": [
     {
       "topic": "Missing verdicts",
@@ -457,7 +741,6 @@
       "detail": "The silk skirt's adapt unit is approved on the strength of her own note 'best with trainers'. Its purchase verdict remains a candidate. Confirm that split with Sofia."
     }
   ],
-
   "candidates": [
     {
       "source_type": "notebook",
@@ -476,31 +759,107 @@
       }
     }
   ],
-
   "inbox": [
-    { "text": "WHERE is this blazer I'm begging you", "expected_mode": "lookup" },
-    { "text": "Ok but if you were me, which one would you actually buy?", "expected_mode": "personal" },
-    { "text": "I love the outfit but I live in trainers. How would you change it?", "expected_mode": "adapt" },
-    { "text": "Anything like this but under £120? I'm not paying £400 lol", "expected_mode": "budget" },
-    { "text": "What size are you in this? I'm usually an 8 but brands are all over the place.", "expected_mode": "constrain" },
-    { "text": "I bought the shoes. What should I wear with them?", "expected_mode": "adapt" },
-    { "text": "I'm trying not to buy more stuff. Can you help me use what I own?", "expected_mode": "adapt" },
-    { "text": "This is the first creator account where I actually save everything.", "expected_mode": "none", "expect_kind": "signal" },
-    { "text": "I've opened this three times. Still deciding.", "expected_mode": "none", "expect_kind": "signal", "expect_signal": "signal_delayed_intent" }
+    {
+      "text": "WHERE is this blazer I'm begging you",
+      "expected_mode": "lookup"
+    },
+    {
+      "text": "Ok but if you were me, which one would you actually buy?",
+      "expected_mode": "personal"
+    },
+    {
+      "text": "I love the outfit but I live in trainers. How would you change it?",
+      "expected_mode": "adapt"
+    },
+    {
+      "text": "Anything like this but under £120? I'm not paying £400 lol",
+      "expected_mode": "budget"
+    },
+    {
+      "text": "What size are you in this? I'm usually an 8 but brands are all over the place.",
+      "expected_mode": "constrain"
+    },
+    {
+      "text": "I bought the shoes. What should I wear with them?",
+      "expected_mode": "adapt"
+    },
+    {
+      "text": "I'm trying not to buy more stuff. Can you help me use what I own?",
+      "expected_mode": "adapt"
+    },
+    {
+      "text": "This is the first creator account where I actually save everything.",
+      "expected_mode": "none",
+      "expect_kind": "signal"
+    },
+    {
+      "text": "I've opened this three times. Still deciding.",
+      "expected_mode": "none",
+      "expect_kind": "signal",
+      "expect_signal": "signal_delayed_intent"
+    }
   ],
-
   "archetypes": [
-    { "name": "Silent saver", "age": 0, "label": "saves everything, never messages", "demo_text": "Ok but if you were me, which one would you actually buy?" },
-    { "name": "Value hunter", "age": 0, "label": "will not overpay", "demo_text": "Anything like this but under £120? I'm not paying £400 lol" },
-    { "name": "Trainers only", "age": 0, "label": "wants it to work with what she wears", "demo_text": "I love the outfit but I live in trainers. How would you change it?" }
+    {
+      "name": "Silent saver",
+      "age": 0,
+      "label": "saves everything, never messages",
+      "demo_text": "Ok but if you were me, which one would you actually buy?"
+    },
+    {
+      "name": "Value hunter",
+      "age": 0,
+      "label": "will not overpay",
+      "demo_text": "Anything like this but under £120? I'm not paying £400 lol"
+    },
+    {
+      "name": "Trainers only",
+      "age": 0,
+      "label": "wants it to work with what she wears",
+      "demo_text": "I love the outfit but I live in trainers. How would you change it?"
+    }
   ],
-
-  "demo": {
-    "archetype": "the silent saver",
-    "steps": [
-      { "label": "Where is this blazer", "text": "WHERE is this blazer I'm begging you", "mode": "lookup" },
-      { "label": "Under £120?", "text": "Anything like this but under £120? I'm not paying £400 lol", "mode": "budget" },
-      { "label": "I live in trainers", "text": "I love the outfit but I live in trainers. How would you change it?", "mode": "adapt" }
-    ]
-  }
+  "demos": [
+    {
+      "name": "She answers",
+      "archetype": "the silent saver",
+      "blurb": "Three questions she answers from her own table.",
+      "steps": [
+        {
+          "label": "Where is this blazer?",
+          "text": "WHERE is this blazer I'm begging you",
+          "mode": "lookup"
+        },
+        {
+          "label": "Under £120?",
+          "text": "Anything like this but under £120? I'm not paying £400 lol",
+          "mode": "budget"
+        },
+        {
+          "label": "I live in trainers",
+          "text": "I love the outfit but I live in trainers. How would you change it?"
+        }
+      ]
+    },
+    {
+      "name": "She declines",
+      "archetype": "the browser",
+      "blurb": "Four items she described but never gave a verdict on.",
+      "steps": [
+        {
+          "label": "Is the grey knit worth it?",
+          "text": "is the grey knit worth it"
+        },
+        {
+          "label": "Help me use what I own",
+          "text": "I'm trying not to buy more stuff. Can you help me use what I own?"
+        },
+        {
+          "label": "Still deciding",
+          "text": "I've opened this three times. Still deciding."
+        }
+      ]
+    }
+  ]
 }

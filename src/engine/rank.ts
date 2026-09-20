@@ -59,6 +59,12 @@ export interface RankResult {
 }
 
 /**
+ * Availability only matters where the visitor was shopping. Asked about a room
+ * she was in, "it was never recorded" is the answer, not a reason to hide it.
+ */
+const SHOPPING_MODES = new Set<Mode>(['decide', 'budget', 'narrow', 'constrain', 'adapt']);
+
+/**
  * A price ceiling only filters where the visitor was shopping. "Is it worth
  * £38?" mentions a number without asking for anything under it.
  */
@@ -93,7 +99,7 @@ export function rank({ units, items, constraints, outcome, mode }: RankInput): R
       continue;
     }
 
-    if (item && item.isAvailable === false) {
+    if (item && item.isAvailable === false && SHOPPING_MODES.has(mode)) {
       skipNotes.push({
         item_id: item.id,
         item_name: item.name,

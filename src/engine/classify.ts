@@ -57,6 +57,8 @@ export const PATTERNS: Pattern[] = [
   { id: 'personal.what_would_you', mode: 'personal', re: /what would you (do|buy|get|pick|choose|keep)\b/, weight: 9 },
   { id: 'personal.the_one_you_would_buy', mode: 'personal', re: /the one you would buy\b|which one would you actually buy\b/, weight: 9 },
   { id: 'personal.you_actually_use', mode: 'personal', re: /what do you actually use\b/, weight: 9 },
+  // "The best X you have been to" is a question about her, not a gap in her notes.
+  { id: 'personal.your_best', mode: 'personal', re: /\bbest\b[^?]*\byou\b|\byour (favourite|favorite|best)\b/, weight: 8 },
 
   // --- route: ordered steps.
   { id: 'route.get_in', mode: 'route', re: /how do i get (in|into|there)\b|how do you get (in|into) (that|the) room\b/, weight: 10 },

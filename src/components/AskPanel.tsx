@@ -5,7 +5,8 @@ import { AnswerCard } from './AnswerCard';
 import { DisclosureBadge } from './DisclosureBadge';
 import { getVisitorId, logEvent, markVisit } from '@/lib/visitor';
 import type { CardAnswer, CardCreator } from '@/lib/card';
-import type { DemoStep } from '@/lib/casefile';
+import { DemoScripts } from './DemoScripts';
+import type { DemoScript, DemoStep } from '@/lib/casefile';
 
 export interface ModeChip {
   label: string;
@@ -38,15 +39,15 @@ interface AskState {
 interface Props {
   creator: CardCreator;
   suggestions: string[];
-  demo: { archetype: string; steps: DemoStep[] } | null;
+  demos: DemoScript[];
 }
 
-export function AskPanel({ creator, suggestions, demo }: Props) {
+export function AskPanel({ creator, suggestions, demos }: Props) {
   const [text, setText] = useState('');
   const [mode, setMode] = useState<string | null>(null);
   const [state, setState] = useState<AskState | null>(null);
   const [pending, setPending] = useState(false);
-  const [demoStep, setDemoStep] = useState<number | null>(null);
+  const [demoStep, setDemoStep] = useState<string | null>(null);
   const resultRef = useRef<HTMLDivElement | null>(null);
 
   // Return detection: a second visit to this creator is a signal, not a click.
@@ -98,10 +99,8 @@ export function AskPanel({ creator, suggestions, demo }: Props) {
     [creator],
   );
 
-  async function runDemoStep(index: number) {
-    if (!demo) return;
-    const step = demo.steps[index];
-    setDemoStep(index);
+  async function runDemoStep(step: DemoStep, key: string) {
+    setDemoStep(key);
     if (step.text) setText(step.text);
     if (step.mode) setMode(step.mode);
     await ask({
@@ -171,25 +170,13 @@ export function AskPanel({ creator, suggestions, demo }: Props) {
           </div>
         ) : null}
 
-        {demo ? (
-          <div className="rounded-xl border border-dashed border-line px-4 py-3">
-            <p className="label">Demo mode — {demo.archetype}&apos;s three taps</p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {demo.steps.map((step, index) => (
-                <button
-                  key={step.label}
-                  type="button"
-                  className="chip"
-                  data-active={demoStep === index}
-                  disabled={pending}
-                  onClick={() => void runDemoStep(index)}
-                >
-                  {index + 1}. {step.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        ) : null}
+        <DemoScripts
+          scripts={demos}
+          accent={creator.accent}
+          activeStep={demoStep}
+          disabled={pending}
+          onRun={(step, key) => void runDemoStep(step, key)}
+        />
       </section>
 
       <div ref={resultRef} className="space-y-4">

@@ -13,6 +13,7 @@ export default async function PersonaPage({ params }: { params: Promise<{ slug: 
 
   const caseFile = readCaseFile(slug);
   const suggestions = (caseFile?.archetypes ?? []).slice(0, 3).map((a) => a.demo_text);
+  const demos = caseFile?.demos ?? [];
 
   return (
     <PersonaStage
@@ -24,6 +25,7 @@ export default async function PersonaPage({ params }: { params: Promise<{ slug: 
         niche: creator.niche,
       }}
       suggestions={suggestions}
+      demos={demos}
       personaUrl={creator.personaUrl}
       live={process.env.PERSONA_LIVE === '1'}
     />

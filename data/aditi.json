@@ -19,7 +19,11 @@
         "name the room",
         "say plainly when she has not made the call"
       ],
-      "donts": ["generic assistant language", "corporate hedging", "advice about rooms she was not in"],
+      "donts": [
+        "generic assistant language",
+        "corporate hedging",
+        "advice about rooms she was not in"
+      ],
       "approved_fillers": [],
       "max_fillers_per_answer": 1,
       "sentence_length_hint": 22,
@@ -39,22 +43,33 @@
         "Which room do you actually mean?",
         "What does the decision look like on paper?",
         "What would you have asked in that room?"
-      ]
+      ],
+      "voice": {
+        "no_match": "I have not made that call, and I would rather say so than say something clever about a room I was not in. Ask me about one I was in and you will get the real version.",
+        "vague": "Which room are you asking about? Tell me that and I can give you something true rather than something tidy.",
+        "trust": "Thank you, genuinely. That is the whole reason I only talk about rooms I was actually in.",
+        "delayed_intent": "No rush at all. Nine days is about average, and it will be here when you come back."
+      }
     }
   },
-
   "items": [
     {
       "id": "founder-interviews",
       "kind": "asset",
       "name": "Founder stage interviews",
       "price_gbp": null,
-      "attrs": { "format": "video", "volume": "6 sessions", "state": "in the can" },
+      "attrs": {
+        "format": "video",
+        "volume": "6 sessions",
+        "state": "in the can"
+      },
       "score": null,
       "note": "best material I have",
       "source_ref": "case file: Aditi Mishra asset table",
       "units": {
-        "lookup": { "rule_text": "Founder stage interviews: 6 sessions, video, in the can." }
+        "lookup": {
+          "rule_text": "Founder stage interviews: 6 sessions, video, in the can."
+        }
       }
     },
     {
@@ -62,16 +77,22 @@
       "kind": "asset",
       "name": "Cannes Lions week",
       "price_gbp": null,
-      "attrs": { "format": "video", "volume": "40 clips", "state": "half cut" },
+      "attrs": {
+        "format": "video",
+        "volume": "40 clips",
+        "state": "half cut"
+      },
       "score": null,
       "note": "everyone only saw the glamour",
       "source_ref": "case file: Aditi Mishra asset table",
       "units": {
-        "lookup": { "rule_text": "Cannes Lions week: 40 clips, video, half cut." },
+        "lookup": {
+          "rule_text": "Cannes Lions week: 40 clips, video, half cut."
+        },
         "verdict": {
           "verdict": null,
           "rule_text": "On that week her note is about what it cost, not what it looked like.",
-          "caveat": "She has never put a number on it, and this is not going to invent one.",
+          "caveat": "I never put a number on that week, and I am not going to invent one now.",
           "priority": 9
         }
       }
@@ -81,12 +102,18 @@
       "kind": "asset",
       "name": "Keynote (300 in the room)",
       "price_gbp": null,
-      "attrs": { "format": "talk", "volume": "32 min", "state": "used once" },
+      "attrs": {
+        "format": "talk",
+        "volume": "32 min",
+        "state": "used once"
+      },
       "score": null,
       "note": "should have been ten things",
       "source_ref": "case file: Aditi Mishra asset table",
       "units": {
-        "lookup": { "rule_text": "Keynote to 300 people: 32 minutes, used once." }
+        "lookup": {
+          "rule_text": "Keynote to 300 people: 32 minutes, used once."
+        }
       }
     },
     {
@@ -94,12 +121,18 @@
       "kind": "asset",
       "name": "Walk-home voice notes",
       "price_gbp": null,
-      "attrs": { "format": "audio", "volume": "9 hrs", "state": "unfiled" },
+      "attrs": {
+        "format": "audio",
+        "volume": "9 hrs",
+        "state": "unfiled"
+      },
       "score": null,
       "note": "where the real thinking is",
       "source_ref": "case file: Aditi Mishra asset table",
       "units": {
-        "lookup": { "rule_text": "Walk-home voice notes: 9 hours of audio, unfiled." }
+        "lookup": {
+          "rule_text": "Walk-home voice notes: 9 hours of audio, unfiled."
+        }
       }
     },
     {
@@ -107,7 +140,11 @@
       "kind": "asset",
       "name": "Backstage Q&A",
       "price_gbp": null,
-      "attrs": { "format": "live", "volume": "unrecorded", "state": "gone" },
+      "attrs": {
+        "format": "live",
+        "volume": "unrecorded",
+        "state": "gone"
+      },
       "score": null,
       "note": "the best answer I ever gave",
       "is_available": false,
@@ -116,6 +153,19 @@
         "lookup": {
           "rule_text": "Backstage Q&A: live, unrecorded, gone.",
           "caveat": "Nothing was recorded, so there is nothing to send you."
+        },
+        "personal": {
+          "verdict": "pick",
+          "rule_id": "R-ADITI-BEST",
+          "rule_text": "Asked for her best, she names the backstage answer. It is the one her own notes call the best she ever gave.",
+          "caveat": "It was never recorded, which is the part that still annoys me.",
+          "priority": 9,
+          "status": "approved",
+          "situation": {
+            "keyword_hits": [
+              "personal.your_best"
+            ]
+          }
         }
       }
     },
@@ -124,12 +174,18 @@
       "kind": "asset",
       "name": "Newsletter archive",
       "price_gbp": null,
-      "attrs": { "format": "text", "volume": "42K list", "state": "dormant" },
+      "attrs": {
+        "format": "text",
+        "volume": "42K list",
+        "state": "dormant"
+      },
       "score": null,
       "note": "I lost the thread",
       "source_ref": "case file: Aditi Mishra asset table",
       "units": {
-        "lookup": { "rule_text": "Newsletter archive: 42K list, dormant." }
+        "lookup": {
+          "rule_text": "Newsletter archive: 42K list, dormant."
+        }
       }
     },
     {
@@ -137,12 +193,18 @@
       "kind": "asset",
       "name": "Six-country speaking run",
       "price_gbp": null,
-      "attrs": { "format": "access", "volume": "4 months", "state": "in progress" },
+      "attrs": {
+        "format": "access",
+        "volume": "4 months",
+        "state": "in progress"
+      },
       "score": null,
       "note": "there is one of me",
       "source_ref": "case file: Aditi Mishra asset table",
       "units": {
-        "lookup": { "rule_text": "Six-country speaking run: 4 months, in progress." }
+        "lookup": {
+          "rule_text": "Six-country speaking run: 4 months, in progress."
+        }
       }
     },
     {
@@ -150,16 +212,21 @@
       "kind": "asset",
       "name": "Reader replies",
       "price_gbp": null,
-      "attrs": { "format": "text", "volume": "2.6K/month", "state": "unsorted" },
+      "attrs": {
+        "format": "text",
+        "volume": "2.6K/month",
+        "state": "unsorted"
+      },
       "score": null,
       "note": "the actual research",
       "source_ref": "case file: Aditi Mishra asset table",
       "units": {
-        "lookup": { "rule_text": "Reader replies: 2.6K a month, unsorted." }
+        "lookup": {
+          "rule_text": "Reader replies: 2.6K a month, unsorted."
+        }
       }
     }
   ],
-
   "extra_units": [
     {
       "id": "seed-offer-decision",
@@ -184,7 +251,6 @@
       "source_ref": "audience question, awaiting Aditi"
     }
   ],
-
   "rules": [
     {
       "id": "R-ADITI-GUARD-ROOM",
@@ -204,13 +270,29 @@
     },
     {
       "id": "R-ADITI-ROUTE-ASK",
-      "mode_scope": ["route"],
+      "mode_scope": [
+        "route"
+      ],
       "conditions": [],
       "effect": {
         "ask_back": "Which room do you actually mean — the stage, the newsletter, or the founder's table?",
         "ask_back_options": [
-          { "label": "The stage", "constraints": { "tags": ["room_stage"] } },
-          { "label": "The newsletter", "constraints": { "tags": ["room_newsletter"] } }
+          {
+            "label": "The stage",
+            "constraints": {
+              "tags": [
+                "room_stage"
+              ]
+            }
+          },
+          {
+            "label": "The newsletter",
+            "constraints": {
+              "tags": [
+                "room_newsletter"
+              ]
+            }
+          }
         ]
       },
       "rule_text": "She will not hand you steps she has not walked. Until she records them, she asks which room you mean.",
@@ -218,16 +300,40 @@
     },
     {
       "id": "R-ADITI-EVENT-ASK",
-      "mode_scope": ["lookup"],
+      "mode_scope": [
+        "lookup"
+      ],
       "conditions": [
-        { "field": "keyword_hits", "op": "contains", "value": "lookup.which_event" },
-        { "field": "owned_item_ids", "op": "exists", "value": false }
+        {
+          "field": "keyword_hits",
+          "op": "contains",
+          "value": "lookup.which_event"
+        },
+        {
+          "field": "owned_item_ids",
+          "op": "exists",
+          "value": false
+        }
       ],
       "effect": {
         "ask_back": "Which one are you looking at — Cannes week, the keynote, or a founder interview?",
         "ask_back_options": [
-          { "label": "Cannes week", "constraints": { "owned_item_ids": ["aditi-i-cannes-week"] } },
-          { "label": "The keynote", "constraints": { "owned_item_ids": ["aditi-i-keynote"] } }
+          {
+            "label": "Cannes week",
+            "constraints": {
+              "owned_item_ids": [
+                "aditi-i-cannes-week"
+              ]
+            }
+          },
+          {
+            "label": "The keynote",
+            "constraints": {
+              "owned_item_ids": [
+                "aditi-i-keynote"
+              ]
+            }
+          }
         ]
       },
       "rule_text": "She has four platforms and one of her. Rather than guess which clip you mean, she asks.",
@@ -235,136 +341,352 @@
     },
     {
       "id": "R-ADITI-VERDICT-COST",
-      "mode_scope": ["verdict"],
-      "conditions": [{ "field": "keyword_hits", "op": "contains", "value": "verdict.cost_you" }],
-      "effect": { "include_item_ids": ["cannes-week"], "cap": 1, "template_id": "aditi.verdict.cost" },
+      "mode_scope": [
+        "verdict"
+      ],
+      "conditions": [
+        {
+          "field": "keyword_hits",
+          "op": "contains",
+          "value": "verdict.cost_you"
+        }
+      ],
+      "effect": {
+        "include_item_ids": [
+          "cannes-week"
+        ],
+        "cap": 1,
+        "template_id": "aditi.verdict.cost"
+      },
       "rule_text": "Asked what a week cost, she answers about the week she was in, and says plainly that she never put a number on it.",
       "weight": 90
     },
     {
       "id": "R-ADITI-LOOKUP",
-      "mode_scope": ["lookup"],
+      "mode_scope": [
+        "lookup"
+      ],
       "conditions": [],
-      "effect": { "cap": 1, "template_id": "aditi.lookup.asset" },
+      "effect": {
+        "cap": 1,
+        "template_id": "aditi.lookup.asset"
+      },
       "rule_text": "Lookup answers give what exists, in what state, and nothing beyond that.",
       "weight": 80
     },
     {
       "id": "R-ADITI-DECIDE-ASK",
-      "mode_scope": ["decide", "constrain"],
+      "mode_scope": [
+        "decide",
+        "constrain"
+      ],
       "conditions": [],
-      "effect": { "ask_back": "Which room do you actually mean?" },
+      "effect": {
+        "ask_back": "Which room do you actually mean?"
+      },
       "rule_text": "Her audience asks about decisions she has not published a view on, so a decide question gets a question back.",
       "weight": 60
     },
     {
       "id": "R-ADITI-NARROW",
-      "mode_scope": ["narrow"],
+      "mode_scope": [
+        "narrow"
+      ],
       "conditions": [],
-      "effect": { "cap": 2 },
+      "effect": {
+        "cap": 2
+      },
       "rule_text": "Two at most. People want her judgement, not her calendar.",
       "weight": 60
+    },
+    {
+      "id": "R-ADITI-BEST",
+      "mode_scope": [
+        "personal"
+      ],
+      "conditions": [
+        {
+          "field": "keyword_hits",
+          "op": "contains",
+          "value": "personal.your_best"
+        }
+      ],
+      "effect": {
+        "include_item_ids": [
+          "backstage-qa"
+        ],
+        "cap": 1,
+        "template_id": "aditi.personal.best"
+      },
+      "rule_text": "Asked what her best was, she answers about a room she was actually in rather than the one with the biggest audience.",
+      "weight": 88
     }
   ],
-
   "templates": [
     {
       "id": "aditi.lookup.asset",
       "mode": "lookup",
-      "slots": ["pick1_name", "pick1_note"],
+      "slots": [
+        "pick1_name",
+        "pick1_note"
+      ],
       "text": "{{pick1_name}}. {{pick1_note}} {{pick1_caveat}}",
       "audio_key": "aditi-lookup-asset"
     },
     {
       "id": "aditi.verdict.cost",
       "mode": "verdict",
-      "slots": ["pick1_name", "pick1_note", "pick1_caveat"],
+      "slots": [
+        "pick1_name",
+        "pick1_note",
+        "pick1_caveat"
+      ],
       "text": "{{pick1_name}}: {{pick1_note}} {{pick1_caveat}}",
       "audio_key": "aditi-verdict-cost"
     },
     {
       "id": "aditi.narrow.two",
       "mode": "narrow",
-      "slots": ["pick1_name", "pick2_name"],
+      "slots": [
+        "pick1_name",
+        "pick2_name"
+      ],
       "text": "Two things: {{pick1_name}} and {{pick2_name}}. {{pick1_note}}",
       "audio_key": "aditi-narrow-two"
     },
     {
       "id": "aditi.decide.generic",
       "mode": "decide",
-      "slots": ["pick1_name", "pick1_note"],
+      "slots": [
+        "pick1_name",
+        "pick1_note"
+      ],
       "text": "{{pick1_name}}. {{pick1_note}}",
       "audio_key": "aditi-decide-generic"
     },
     {
       "id": "aditi.personal.mine",
       "mode": "personal",
-      "slots": ["pick1_name", "pick1_note"],
+      "slots": [
+        "pick1_name",
+        "pick1_note"
+      ],
       "text": "If it were me: {{pick1_name}}. {{pick1_note}}",
       "audio_key": "aditi-personal-mine"
     },
     {
       "id": "aditi.adapt.generic",
       "mode": "adapt",
-      "slots": ["pick1_name", "owned_name"],
+      "slots": [
+        "pick1_name",
+        "owned_name"
+      ],
       "text": "You already have {{owned_name}}. The next thing is {{pick1_name}}. {{pick1_note}}",
       "audio_key": "aditi-adapt-generic"
     },
     {
       "id": "aditi.route.steps",
       "mode": "route",
-      "slots": ["pick1_name", "pick1_note"],
+      "slots": [
+        "pick1_name",
+        "pick1_note"
+      ],
       "text": "{{pick1_name}}. {{pick1_note}}",
       "audio_key": "aditi-route-steps"
     },
     {
       "id": "aditi.constrain.generic",
       "mode": "constrain",
-      "slots": ["pick1_name", "pick1_note"],
+      "slots": [
+        "pick1_name",
+        "pick1_note"
+      ],
       "text": "{{pick1_name}}. {{pick1_note}}",
       "audio_key": "aditi-constrain-generic"
+    },
+    {
+      "id": "aditi.personal.best",
+      "mode": "personal",
+      "slots": [
+        "pick1_name",
+        "pick1_note"
+      ],
+      "text": "{{pick1_name}}. {{pick1_note}} {{pick1_caveat}}",
+      "audio_key": "aditi-personal-best"
     }
   ],
-
   "make_next": {
     "label": "Ranked by evidence in the case file, not by reach",
     "note": "Sign-ups per 100K views are computed from the view and sign-up counts in her brief. The post with the largest audience is the one that converted least.",
     "posts": [
-      { "title": "The answer I gave a founder backstage", "views": 320000, "signups": 806 },
-      { "title": "What that week actually cost me", "views": 890000, "signups": 611 },
-      { "title": "The three questions I ask before I post anything", "views": 1400000, "signups": 340 },
-      { "title": "Everything I saw at Cannes Lions", "views": 3900000, "signups": 62 },
-      { "title": "The opportunities I said no to this year", "views": 1100000, "signups": 0 }
+      {
+        "title": "The answer I gave a founder backstage",
+        "views": 320000,
+        "signups": 806
+      },
+      {
+        "title": "What that week actually cost me",
+        "views": 890000,
+        "signups": 611
+      },
+      {
+        "title": "The three questions I ask before I post anything",
+        "views": 1400000,
+        "signups": 340
+      },
+      {
+        "title": "Everything I saw at Cannes Lions",
+        "views": 3900000,
+        "signups": 62
+      },
+      {
+        "title": "The opportunities I said no to this year",
+        "views": 1100000,
+        "signups": 0
+      }
     ]
   },
-
   "cohort": {
     "label": "Sample from case file, not live",
     "source_ref": "case file: Aditi Mishra audience cohort table",
     "rows": [
-      { "label": "U-014", "saves": 7, "shares": 2, "returns": 4, "link_click": false, "converted": true, "lag_days": 11 },
-      { "label": "U-031", "saves": 2, "shares": 0, "returns": 1, "link_click": true, "converted": true, "lag_days": 0.6 },
-      { "label": "U-067", "saves": 5, "shares": 3, "returns": 3, "link_click": false, "converted": true, "lag_days": 8 },
-      { "label": "U-082", "saves": 1, "shares": 0, "returns": 1, "link_click": true, "converted": false, "lag_days": null },
-      { "label": "U-104", "saves": 9, "shares": 5, "returns": 6, "link_click": false, "converted": true, "lag_days": 14 },
-      { "label": "U-121", "saves": 3, "shares": 1, "returns": 2, "link_click": false, "converted": true, "lag_days": 5 },
-      { "label": "U-139", "saves": 6, "shares": 4, "returns": 3, "link_click": false, "converted": true, "lag_days": 7 },
-      { "label": "U-166", "saves": 1, "shares": 0, "returns": 1, "link_click": true, "converted": false, "lag_days": null },
-      { "label": "U-204", "saves": 11, "shares": 6, "returns": 7, "link_click": false, "converted": true, "lag_days": 16 },
-      { "label": "U-219", "saves": 4, "shares": 0, "returns": 2, "link_click": true, "converted": true, "lag_days": 2 },
-      { "label": "U-241", "saves": 2, "shares": 2, "returns": 2, "link_click": false, "converted": false, "lag_days": null },
-      { "label": "U-288", "saves": 7, "shares": 4, "returns": 5, "link_click": false, "converted": true, "lag_days": 9 }
+      {
+        "label": "U-014",
+        "saves": 7,
+        "shares": 2,
+        "returns": 4,
+        "link_click": false,
+        "converted": true,
+        "lag_days": 11
+      },
+      {
+        "label": "U-031",
+        "saves": 2,
+        "shares": 0,
+        "returns": 1,
+        "link_click": true,
+        "converted": true,
+        "lag_days": 0.6
+      },
+      {
+        "label": "U-067",
+        "saves": 5,
+        "shares": 3,
+        "returns": 3,
+        "link_click": false,
+        "converted": true,
+        "lag_days": 8
+      },
+      {
+        "label": "U-082",
+        "saves": 1,
+        "shares": 0,
+        "returns": 1,
+        "link_click": true,
+        "converted": false,
+        "lag_days": null
+      },
+      {
+        "label": "U-104",
+        "saves": 9,
+        "shares": 5,
+        "returns": 6,
+        "link_click": false,
+        "converted": true,
+        "lag_days": 14
+      },
+      {
+        "label": "U-121",
+        "saves": 3,
+        "shares": 1,
+        "returns": 2,
+        "link_click": false,
+        "converted": true,
+        "lag_days": 5
+      },
+      {
+        "label": "U-139",
+        "saves": 6,
+        "shares": 4,
+        "returns": 3,
+        "link_click": false,
+        "converted": true,
+        "lag_days": 7
+      },
+      {
+        "label": "U-166",
+        "saves": 1,
+        "shares": 0,
+        "returns": 1,
+        "link_click": true,
+        "converted": false,
+        "lag_days": null
+      },
+      {
+        "label": "U-204",
+        "saves": 11,
+        "shares": 6,
+        "returns": 7,
+        "link_click": false,
+        "converted": true,
+        "lag_days": 16
+      },
+      {
+        "label": "U-219",
+        "saves": 4,
+        "shares": 0,
+        "returns": 2,
+        "link_click": true,
+        "converted": true,
+        "lag_days": 2
+      },
+      {
+        "label": "U-241",
+        "saves": 2,
+        "shares": 2,
+        "returns": 2,
+        "link_click": false,
+        "converted": false,
+        "lag_days": null
+      },
+      {
+        "label": "U-288",
+        "saves": 7,
+        "shares": 4,
+        "returns": 5,
+        "link_click": false,
+        "converted": true,
+        "lag_days": 9
+      }
     ]
   },
-
   "case_stats": [
-    { "stat": "People who acted on her advice and never clicked a link in the post", "value": "71%", "source_ref": "case file: Aditi Mishra brief" },
-    { "stat": "Median days between saving and acting", "value": "9.2 days", "source_ref": "case file: Aditi Mishra brief" },
-    { "stat": "Highest-value inbound that came via a forward rather than a follow", "value": "44%", "source_ref": "case file: Aditi Mishra brief" },
-    { "stat": "Action rate when three or more posts were saved first", "value": "3.1x higher", "source_ref": "case file: Aditi Mishra brief" },
-    { "stat": "DMs and emails a month", "value": "2,600", "source_ref": "case file: Aditi Mishra brief" }
+    {
+      "stat": "People who acted on her advice and never clicked a link in the post",
+      "value": "71%",
+      "source_ref": "case file: Aditi Mishra brief"
+    },
+    {
+      "stat": "Median days between saving and acting",
+      "value": "9.2 days",
+      "source_ref": "case file: Aditi Mishra brief"
+    },
+    {
+      "stat": "Highest-value inbound that came via a forward rather than a follow",
+      "value": "44%",
+      "source_ref": "case file: Aditi Mishra brief"
+    },
+    {
+      "stat": "Action rate when three or more posts were saved first",
+      "value": "3.1x higher",
+      "source_ref": "case file: Aditi Mishra brief"
+    },
+    {
+      "stat": "DMs and emails a month",
+      "value": "2,600",
+      "source_ref": "case file: Aditi Mishra brief"
+    }
   ],
-
   "todos": [
     {
       "topic": "Audience decisions",
@@ -385,9 +707,12 @@
     {
       "topic": "Room steps",
       "detail": "How do I get in is one of her four most repeated questions and she has recorded no steps. The route mode asks which room until she does."
+    },
+    {
+      "topic": "Backstage answer",
+      "detail": "Her personal \"best\" unit is approved on the strength of her own note, \"the best answer I ever gave\". The answer itself was never recorded — ask her to re-record it. It is also the best-converting thing in her case file."
     }
   ],
-
   "candidates": [
     {
       "source_type": "post",
@@ -406,27 +731,92 @@
       }
     }
   ],
-
   "inbox": [
-    { "text": "WHICH event was this, I am begging you", "expected_mode": "lookup", "expect_kind": "ask_back" },
-    { "text": "Ok but if you were me, would you take the seed-stage offer or stay put?", "expected_mode": "personal", "expect_kind": "no_match" },
-    { "text": "How much did that week actually cost you? I have about £600", "expected_mode": "verdict" },
-    { "text": "I took the job. What do I actually do in the first 30 days?", "expected_mode": "route", "expect_kind": "ask_back" },
-    { "text": "This is the first creator account where I actually read the captions.", "expected_mode": "none", "expect_kind": "signal" }
+    {
+      "text": "WHICH event was this, I am begging you",
+      "expected_mode": "lookup",
+      "expect_kind": "ask_back"
+    },
+    {
+      "text": "Ok but if you were me, would you take the seed-stage offer or stay put?",
+      "expected_mode": "personal",
+      "expect_kind": "no_match"
+    },
+    {
+      "text": "How much did that week actually cost you? I have about £600",
+      "expected_mode": "verdict"
+    },
+    {
+      "text": "I took the job. What do I actually do in the first 30 days?",
+      "expected_mode": "route",
+      "expect_kind": "ask_back"
+    },
+    {
+      "text": "This is the first creator account where I actually read the captions.",
+      "expected_mode": "none",
+      "expect_kind": "signal"
+    }
   ],
-
   "archetypes": [
-    { "name": "The forwarder", "age": 0, "label": "sends it on rather than replying", "demo_text": "WHICH event was this, I am begging you" },
-    { "name": "The operator", "age": 0, "label": "took the job, needs a next step", "demo_text": "I took the job. What do I actually do in the first 30 days?" },
-    { "name": "The quiet reader", "age": 0, "label": "reads every caption, never messages", "demo_text": "How much did that week actually cost you? I have about £600" }
+    {
+      "name": "The forwarder",
+      "age": 0,
+      "label": "sends it on rather than replying",
+      "demo_text": "WHICH event was this, I am begging you"
+    },
+    {
+      "name": "The operator",
+      "age": 0,
+      "label": "took the job, needs a next step",
+      "demo_text": "I took the job. What do I actually do in the first 30 days?"
+    },
+    {
+      "name": "The quiet reader",
+      "age": 0,
+      "label": "reads every caption, never messages",
+      "demo_text": "How much did that week actually cost you? I have about £600"
+    }
   ],
-
-  "demo": {
-    "archetype": "the forwarder",
-    "steps": [
-      { "label": "Which event was this", "text": "WHICH event was this, I am begging you", "mode": "lookup" },
-      { "label": "Cannes week", "text": "WHICH event was this, I am begging you", "mode": "lookup", "constraints": { "owned_item_ids": ["aditi-i-cannes-week"] } },
-      { "label": "What did that week cost?", "text": "How much did that week actually cost you?", "mode": "verdict" }
-    ]
-  }
+  "demos": [
+    {
+      "name": "She answers",
+      "archetype": "the quiet reader",
+      "blurb": "A question her own notes cover. She answers, and shows the rule.",
+      "steps": [
+        {
+          "label": "Best event you have been to?",
+          "text": "what is the best event you have been to?"
+        },
+        {
+          "label": "What did that week cost?",
+          "text": "How much did that week actually cost you?",
+          "mode": "verdict"
+        },
+        {
+          "label": "Which event was this?",
+          "text": "WHICH event was this, I am begging you",
+          "mode": "lookup"
+        }
+      ]
+    },
+    {
+      "name": "She declines",
+      "archetype": "the operator",
+      "blurb": "Questions she has not answered. She says so warmly, and never invents.",
+      "steps": [
+        {
+          "label": "Take the seed-stage offer?",
+          "text": "Ok but if you were me, would you take the seed-stage offer or stay put?"
+        },
+        {
+          "label": "First 30 days?",
+          "text": "I took the job. What do I actually do in the first 30 days?"
+        },
+        {
+          "label": "I read every caption",
+          "text": "This is the first creator account where I actually read the captions."
+        }
+      ]
+    }
+  ]
 }

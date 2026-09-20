@@ -128,14 +128,30 @@ const REFERENCE_RULE = (creatorId: string): RuleView => ({
   weight: 0,
 });
 
-function questionOptions(questions: string[]): AskBackOption[] {
-  return questions.slice(0, 2).map((label) => ({ label }));
+function questionOptions(questions: string[], exclude?: string): AskBackOption[] {
+  const normalise = (value: string) => value.trim().toLowerCase().replace(/[?.!]+$/, '');
+  return questions
+    .filter((q) => !exclude || normalise(q) !== normalise(exclude))
+    .slice(0, 2)
+    .map((label) => ({ label }));
 }
 
-function signalText(type: 'signal_trust' | 'signal_delayed_intent', name: string): string {
-  return type === 'signal_trust'
-    ? `Noted, and thank you. Nothing to decide here — ${name}'s picks stay where you left them.`
-    : `Saved for later. When payday lands, ${name}'s pick will be exactly where you left it.`;
+/**
+ * A refusal is still her speaking. The copy is authored per creator in her
+ * style guide; these are only the fallbacks for a creator who has not set any.
+ */
+function signalText(
+  type: 'signal_trust' | 'signal_delayed_intent',
+  creator: Snapshot['creator'],
+): string {
+  const voice = creator.styleGuide.voice;
+  if (type === 'signal_trust') {
+    return (
+      voice?.trust ??
+      `That means a lot. Nothing to decide here — ${creator.name}'s picks stay where you left them.`
+    );
+  }
+  return voice?.delayed_intent ?? 'No rush. It will be here when you come back to it.';
 }
 
 export function route(snapshot: Snapshot, input: RouterInput): RouterResult {
@@ -178,22 +194,27 @@ export function route(snapshot: Snapshot, input: RouterInput): RouterResult {
       constraints,
       signal: {
         type,
-        text: signalText(type, creator.name),
+        text: signalText(type, creator),
         offerSave: type === 'signal_delayed_intent',
       },
     };
   }
 
   if (classification.fellBack && !hasConstraint && rawText.length > 0) {
-    const question = creator.styleGuide.filter_question ?? creator.styleGuide.ask_back_questions[0] ?? null;
+    const question =
+      creator.styleGuide.filter_question ??
+      creator.styleGuide.voice?.vague ??
+      creator.styleGuide.ask_back_questions[0] ??
+      'Tell me a bit more and I will point you at one thing.';
     return {
       kind: 'ask_back',
       ...base,
       askBack: {
-        question: question ?? 'Tell me a bit more and I will point you at one thing.',
+        question,
         ruleId: null,
-        ruleText: 'Too little to go on, so she asks one question instead of guessing.',
-        options: questionOptions(creator.styleGuide.ask_back_questions),
+        ruleText: `${creator.name} would rather ask one question than guess at an answer.`,
+        // Never offer the question back to itself as a reply.
+        options: questionOptions(creator.styleGuide.ask_back_questions, question),
       },
     };
   }
@@ -271,8 +292,10 @@ export function route(snapshot: Snapshot, input: RouterInput): RouterResult {
       kind: 'no_match',
       ...base,
       noMatch: {
-        text: `${creator.name} has not made a call on that yet, so this is not going to pretend she has.`,
-        question: question || (extraSkips.length > 0 ? null : null),
+        text:
+          creator.styleGuide.voice?.no_match ??
+          `${creator.name} has not made that call yet, and would rather say so than guess.`,
+        question: extraSkips.length > 0 ? null : question,
       },
     };
   }
