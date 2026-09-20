@@ -15,6 +15,8 @@ export { looksLikeGlb } from './model-url';
  */
 
 export interface TtsResult {
+  /** Which path actually produced this, not which one was preferred. */
+  via: 'daytona' | 'direct';
   audioBase64: string;
   frames: VisemeFrame[];
   durationSec: number;
@@ -51,16 +53,25 @@ function durationFrom(alignment: Alignment): number {
  */
 export async function synthesise(text: string, voiceId: string): Promise<TtsResult> {
   if (process.env.DAYTONA_API_URL?.trim()) {
-    const result = await viaDaytona<{ audio_base64: string; alignment: Alignment }>('/tts', {
-      text,
-      voice_id: voiceId,
-    });
-    return {
-      audioBase64: result.audio_base64,
-      frames: alignmentToVisemes(result.alignment),
-      durationSec: durationFrom(result.alignment),
-      source: 'elevenlabs',
-    };
+    try {
+      const result = await viaDaytona<{ audio_base64: string; alignment: Alignment }>('/tts', {
+        text,
+        voice_id: voiceId,
+      });
+      return {
+        audioBase64: result.audio_base64,
+        frames: alignmentToVisemes(result.alignment),
+        durationSec: durationFrom(result.alignment),
+        source: 'elevenlabs',
+        via: 'daytona',
+      };
+    } catch (error) {
+      // The proxy is the preferred path, not the only one. If the sandbox is
+      // down and this process holds a key of its own, use it rather than
+      // dropping the creator back to a browser voice.
+      if (!process.env.ELEVENLABS_API_KEY?.trim()) throw error;
+      console.warn('persona: Daytona proxy unavailable, calling ElevenLabs directly —', error);
+    }
   }
 
   const key = process.env.ELEVENLABS_API_KEY?.trim();
@@ -86,6 +97,7 @@ export async function synthesise(text: string, voiceId: string): Promise<TtsResu
     frames: alignmentToVisemes(data.alignment),
     durationSec: durationFrom(data.alignment),
     source: 'elevenlabs',
+    via: 'direct',
   };
 }
 

@@ -88,7 +88,7 @@ export async function POST(request: Request) {
           source: result.source,
         },
         cached: false,
-        via: config.daytonaUrl ? 'daytona' : 'direct',
+        via: result.via,
       });
     } catch (error) {
       // A provider failure must never break the answer — fall through to the
