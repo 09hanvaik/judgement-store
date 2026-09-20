@@ -366,7 +366,7 @@ export function PersonaStage({ creator, suggestions, personaUrl, live }: Props) 
           ) : null}
 
           {(answer?.firedRules.length ?? 0) > 0 || state?.kind === 'ask_back' ? (
-            <details className="rules">
+            <details className="rules" open>
               <summary>The rule that fired</summary>
               <ul>
                 {answer

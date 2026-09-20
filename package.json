@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "build": "node -e \"process.env.NEXT_DIST_DIR='.next-build';require('child_process').execSync('npx next build',{stdio:'inherit',env:process.env})\"",
+    "start": "node -e \"process.env.NEXT_DIST_DIR='.next-build';require('child_process').execSync('npx next start',{stdio:'inherit',env:process.env})\"",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "db:migrate": "tsx scripts/migrate.ts",
