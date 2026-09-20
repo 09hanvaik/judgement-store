@@ -712,7 +712,7 @@
     "steps": [
       { "label": "Just tell me", "mode": "decide", "chips": ["Just tell me"] },
       { "label": "Maya I have a first date Friday HELP", "text": "Maya I have a first date Friday HELP", "mode": "decide" },
-      { "label": "I just want to look hot tomorrow", "text": "Maya I have a first date Friday HELP", "mode": "decide", "tags": ["look_good_fast"] }
+      { "label": "I just want to look hot tomorrow", "text": "Maya I have a first date Friday HELP", "mode": "decide", "constraints": { "tags": ["look_good_fast"] } }
     ]
   }
 }

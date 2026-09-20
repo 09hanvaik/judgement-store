@@ -12,7 +12,8 @@ export interface DemoStep {
   text?: string;
   mode?: string;
   chips?: string[];
-  tags?: string[];
+  /** Chip constraints this step sets, e.g. a tag or a referenced item. */
+  constraints?: Record<string, unknown>;
 }
 
 export interface CaseFile {

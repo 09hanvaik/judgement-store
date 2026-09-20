@@ -11,6 +11,18 @@ import { enforceSentenceLength, injectFillers, stripBannedPhrases } from './fill
 
 export type Slots = Record<string, string | undefined>;
 
+/**
+ * Creators write notes as fragments ("buy once, wear forever"). Her words are
+ * kept exactly; only the opening capital and the full stop are added so the
+ * fragment reads as a sentence inside a template.
+ */
+function asSentence(value: string | null | undefined): string | undefined {
+  const text = (value ?? '').trim();
+  if (!text) return undefined;
+  const capitalised = text.charAt(0).toUpperCase() + text.slice(1);
+  return /[.!?]$/.test(capitalised) ? capitalised : `${capitalised}.`;
+}
+
 export function buildSlots(creatorName: string, picks: Pick[], extra: Slots = {}): Slots {
   const slots: Slots = { creator_name: creatorName, ...extra };
   picks.forEach((pick, index) => {
@@ -20,9 +32,14 @@ export function buildSlots(creatorName: string, picks: Pick[], extra: Slots = {}
     slots[`pick${n}_price`] = item?.priceGbp != null ? `£${item.priceGbp}` : undefined;
     slots[`pick${n}_score`] = pick.unit.score != null ? pick.unit.score.toFixed(1) : undefined;
     slots[`pick${n}_verdict`] = pick.unit.verdict ?? undefined;
-    slots[`pick${n}_note`] = pick.unit.note || undefined;
-    slots[`pick${n}_caveat`] = pick.unit.caveat || undefined;
+    slots[`pick${n}_note`] = asSentence(pick.unit.note);
+    slots[`pick${n}_caveat`] = asSentence(pick.unit.caveat);
+    // Raw variants keep her exact wording for templates that quote it mid-sentence.
+    slots[`pick${n}_note_raw`] = pick.unit.note || undefined;
+    slots[`pick${n}_caveat_raw`] = pick.unit.caveat || undefined;
     slots[`pick${n}_kind`] = item?.kind;
+    const size = item?.attrs?.size;
+    slots[`pick${n}_size`] = typeof size === 'string' ? size : undefined;
   });
   return slots;
 }

@@ -108,7 +108,7 @@ export function AskPanel({ creator, suggestions, demo }: Props) {
       text: step.text,
       mode: step.mode ?? null,
       chips: step.chips,
-      chipConstraints: step.tags ? { tags: step.tags } : undefined,
+      chipConstraints: step.constraints,
     });
   }
 

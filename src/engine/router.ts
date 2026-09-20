@@ -237,8 +237,10 @@ export function route(snapshot: Snapshot, input: RouterInput): RouterResult {
 
   // Some modes are meaningless without one fact. Ask for it rather than guess.
   const modeRequirement = MODE_REQUIREMENTS[mode];
+  // A rule that already named something has answered the question for us.
   const modeRequirementMissing =
     modeRequirement !== undefined &&
+    outcome.includedItemIds.length === 0 &&
     ((constraints as Record<string, unknown>)[modeRequirement] === undefined ||
       (Array.isArray((constraints as Record<string, unknown>)[modeRequirement]) &&
         ((constraints as Record<string, unknown>)[modeRequirement] as unknown[]).length === 0));

@@ -80,6 +80,8 @@ export interface Condition {
   field: ConstraintField;
   op: ConditionOp;
   value?: unknown;
+  /** Inverts the test, so a rule can say "unless this matched". */
+  negate?: boolean;
 }
 
 export interface AskBackOption {

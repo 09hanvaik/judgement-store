@@ -23,6 +23,11 @@ function asNumber(value: unknown): number | null {
 }
 
 export function evaluateCondition(condition: Condition, ctx: RuleContext): boolean {
+  const result = testCondition(condition, ctx);
+  return condition.negate ? !result : result;
+}
+
+function testCondition(condition: Condition, ctx: RuleContext): boolean {
   const actual = fieldValue(condition.field, ctx);
   const expected = condition.value;
 
